@@ -1,0 +1,38 @@
+.billing-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  background: var(--bg, #0f1419);
+  color: var(--text, #e7ecf1);
+}
+
+.billing-card {
+  width: min(480px, 100%);
+  padding: 28px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+}
+
+.billing-card-success {
+  border-color: rgba(52, 211, 153, 0.35);
+}
+
+.billing-card h1 {
+  margin: 0 0 12px;
+  font-size: 1.5rem;
+}
+
+.billing-card p {
+  margin: 0 0 20px;
+  line-height: 1.5;
+  color: rgba(231, 236, 241, 0.82);
+}
+
+.billing-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}

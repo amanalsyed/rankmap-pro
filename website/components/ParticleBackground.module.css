@@ -1,0 +1,73 @@
+.root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.grid {
+  position: absolute;
+  inset: -40px;
+  background-image: radial-gradient(circle at 1px 1px, rgba(79, 70, 229, 0.05) 1px, transparent 0);
+  background-size: 32px 32px;
+  animation: grid-drift 40s linear infinite;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 0%, black 20%, transparent 75%);
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: pulse-glow 8s ease-in-out infinite;
+}
+
+.orb1 {
+  width: 520px;
+  height: 520px;
+  top: -180px;
+  right: -120px;
+  background: radial-gradient(circle, rgba(79, 70, 229, 0.18) 0%, transparent 70%);
+}
+
+.orb2 {
+  width: 400px;
+  height: 400px;
+  bottom: 5%;
+  left: -160px;
+  background: radial-gradient(circle, rgba(102, 126, 234, 0.14) 0%, transparent 70%);
+  animation-delay: -4s;
+}
+
+.diagonalStripes {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 45%;
+  height: 100%;
+  background: repeating-linear-gradient(
+    -55deg,
+    transparent,
+    transparent 40px,
+    rgba(79, 70, 229, 0.02) 40px,
+    rgba(79, 70, 229, 0.02) 41px
+  );
+  mask-image: linear-gradient(to left, black, transparent 80%);
+}
+
+@media (max-width: 768px) {
+  .diagonalStripes {
+    display: none;
+  }
+  .orb1 {
+    width: 280px;
+    height: 280px;
+  }
+}

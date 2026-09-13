@@ -1,0 +1,143 @@
+html,
+body,
+#root {
+  width: 720px;
+  min-width: 720px;
+  max-width: 720px;
+}
+
+.app {
+  width: 720px;
+  padding: 20px 22px 24px;
+}
+
+.popup-header {
+  align-items: center;
+}
+
+.popup-header .header-copy {
+  flex: 1;
+  min-width: 0;
+}
+
+.header-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-left: auto;
+  flex: none;
+  max-width: 52%;
+}
+
+.popup-auth-btn {
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.controls {
+  margin-top: 16px;
+  display: grid;
+  gap: 14px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.form-grid .field-wide {
+  grid-column: 1 / -1;
+}
+
+/* Primary scan button gets its own full-width row */
+.action-row-primary {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 8px;
+}
+
+.action-row-primary .btn-primary {
+  width: 100%;
+  flex: none;
+  white-space: nowrap;
+}
+
+.action-row-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 8px;
+}
+
+.action-row-controls .btn-pause,
+.action-row-controls .btn-resume,
+.action-row-controls .btn-stop {
+  width: 100%;
+}
+
+.action-row-secondary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.action-row-secondary .btn-secondary {
+  width: 100%;
+}
+
+.table-wrap {
+  max-height: 300px;
+}
+
+.scan-mode-toggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.scan-mode-toggle button {
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--bg-elevated);
+  font-family: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.scan-mode-toggle button.active {
+  border-color: var(--brand);
+  background: var(--brand-soft);
+  color: var(--brand);
+}
+
+.scan-mode-toggle button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.cities-textarea {
+  width: 100%;
+  min-height: 88px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  font-family: inherit;
+  font-size: 13px;
+  resize: vertical;
+  background: var(--bg-elevated);
+}
+
+.field-hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-muted);
+  line-height: 1.4;
+}

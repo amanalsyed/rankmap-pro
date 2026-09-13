@@ -1,0 +1,20 @@
+[project]
+id = "ydficltfmssvqbrqpchn"
+
+[functions.create-checkout]
+verify_jwt = false
+
+[functions.customer-portal]
+verify_jwt = false
+
+[functions.polar-webhook]
+verify_jwt = false
+
+[functions.billing-return]
+verify_jwt = false
+
+[functions.sync-billing]
+verify_jwt = false
+
+[functions.submit-feedback]
+verify_jwt = false

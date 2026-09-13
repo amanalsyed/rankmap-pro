@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.local
+.DS_Store
+website/.next/
+website/.vercel/
+.env
+.env.*
+!.env*.example

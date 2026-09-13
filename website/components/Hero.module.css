@@ -1,0 +1,122 @@
+.hero {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100svh - 72px);
+  padding: 100px 0 80px;
+  text-align: center;
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 820px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-muted);
+  margin-bottom: 28px;
+  box-shadow: var(--shadow);
+}
+
+.badgeDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--success);
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+.title {
+  font-size: clamp(2.75rem, 6.5vw, 4.5rem);
+  font-weight: 800;
+  margin-bottom: 24px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+}
+
+.titleAccent {
+  display: block;
+  background: linear-gradient(135deg, var(--brand) 0%, #667eea 50%, #7c3aed 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: clamp(1.05rem, 2.2vw, 1.35rem);
+  color: var(--text-muted);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 740px;
+}
+
+.ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 48px;
+}
+
+.ctas .btn-primary {
+  padding: 16px 28px;
+  font-size: 16px;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 32px;
+  list-style: none;
+  padding-top: 8px;
+  border-top: 1px solid var(--line);
+  width: 100%;
+  max-width: 640px;
+}
+
+.stats li {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: center;
+}
+
+.stats strong {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.stats span {
+  font-size: 13px;
+  color: var(--text-soft);
+}
+
+@media (max-width: 600px) {
+  .hero {
+    min-height: auto;
+    padding: 120px 0 64px;
+  }
+
+  .stats {
+    gap: 20px;
+  }
+
+  .stats li {
+    flex: 1 1 140px;
+  }
+}

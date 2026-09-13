@@ -1,0 +1,51 @@
+html,
+body {
+  min-width: 0;
+  max-width: none;
+  width: 100%;
+  min-height: 100%;
+}
+
+.results-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 56px;
+}
+
+.results-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.results-page .header {
+  flex: 1;
+}
+
+.export-btn {
+  flex: none;
+  white-space: nowrap;
+}
+
+.results-page .table-wrap {
+  max-height: calc(100vh - 250px);
+}
+
+@media (max-width: 800px) {
+  .results-page {
+    padding: 18px 14px 40px;
+  }
+
+  .results-page-header {
+    flex-direction: column;
+  }
+
+  .export-btn {
+    width: 100%;
+  }
+
+  .results-page .table-wrap {
+    max-height: none;
+  }
+}

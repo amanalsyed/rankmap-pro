@@ -1,0 +1,122 @@
+.section {
+  position: relative;
+  z-index: 1;
+  padding: 100px 0;
+}
+
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.group {
+  position: relative;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px;
+  overflow: hidden;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease,
+    border-color 0.3s ease;
+}
+
+.group:hover {
+  transform: translateY(-3px);
+  border-color: rgba(79, 70, 229, 0.2);
+  box-shadow: var(--shadow-lg);
+}
+
+.groupHead {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.iconWrap {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: var(--brand-soft);
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.groupHead h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--accent, var(--brand));
+}
+
+.summary {
+  font-size: 15px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  max-width: 720px;
+}
+
+.itemList {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px 24px;
+}
+
+.itemList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+.itemList svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: var(--accent, var(--brand));
+  margin-top: 2px;
+}
+
+.cardGlow {
+  position: absolute;
+  bottom: -60px;
+  right: -60px;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent, var(--brand)) 0%, transparent 70%);
+  opacity: 0.06;
+  transition: opacity 0.3s;
+  pointer-events: none;
+}
+
+.group:hover .cardGlow {
+  opacity: 0.12;
+}
+
+@media (max-width: 768px) {
+  .itemList {
+    grid-template-columns: 1fr;
+  }
+  .group {
+    padding: 24px 20px;
+  }
+  .groupHead {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .section {
+    padding: 72px 0;
+  }
+}
