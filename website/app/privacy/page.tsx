@@ -1,10 +1,24 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { SITE } from '@/content/site';
+import { SEO, SITE } from '@/content/site';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
-  description: `Privacy Policy for ${SITE.name} — how we collect, use, and protect your data.`,
+  description: `How ${SITE.name} collects, uses, and protects your data when you use our Chrome extension and website.`,
+  openGraph: {
+    title: `Privacy Policy | ${SITE.name}`,
+    description: `How ${SITE.name} collects, uses, and protects your data.`,
+    url: `${SITE.url}/privacy`,
+    type: 'website',
+    images: [{ url: SEO.ogImage, width: SEO.ogImageWidth, height: SEO.ogImageHeight, alt: SEO.ogImageAlt }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `Privacy Policy | ${SITE.name}`,
+    description: `How ${SITE.name} collects, uses, and protects your data.`,
+    images: [SEO.ogImage],
+  },
+  alternates: { canonical: `${SITE.url}/privacy` },
 };
 
 export default function PrivacyPage() {

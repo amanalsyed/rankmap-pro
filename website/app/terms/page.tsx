@@ -1,10 +1,24 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { SITE } from '@/content/site';
+import { SEO, SITE } from '@/content/site';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: `Terms of Service for ${SITE.name} Chrome extension and related services.`,
+  description: `Terms of Service for the ${SITE.name} Chrome extension, Lifetime licensing, and rankmappro.com.`,
+  openGraph: {
+    title: `Terms of Service | ${SITE.name}`,
+    description: `Terms of Service for the ${SITE.name} Chrome extension and website.`,
+    url: `${SITE.url}/terms`,
+    type: 'website',
+    images: [{ url: SEO.ogImage, width: SEO.ogImageWidth, height: SEO.ogImageHeight, alt: SEO.ogImageAlt }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `Terms of Service | ${SITE.name}`,
+    description: `Terms of Service for the ${SITE.name} Chrome extension and website.`,
+    images: [SEO.ogImage],
+  },
+  alternates: { canonical: `${SITE.url}/terms` },
 };
 
 export default function TermsPage() {

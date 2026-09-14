@@ -14,6 +14,17 @@ export const SITE = {
   moneyBackGuarantee: '14-day money-back guarantee — no questions asked.',
 } as const;
 
+/** Homepage SEO + social preview (title under 60 chars, description under 155 chars). */
+export const SEO = {
+  title: 'RankMap Pro — Local SEO Tools for Google Maps',
+  description:
+    'Find no-website leads on Google Maps. Run GBP audits, rank checks, and competitor scans. Chrome extension for local SEO pros. Start free.',
+  ogImage: '/og-image.png',
+  ogImageWidth: 1400,
+  ogImageHeight: 560,
+  ogImageAlt: 'RankMap Pro — local SEO tools for Google Maps: leads, GBP audits, rank checks',
+} as const;
+
 export const FEATURE_GROUPS = [
   {
     id: 'lead-finder',

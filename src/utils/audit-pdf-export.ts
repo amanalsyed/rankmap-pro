@@ -182,23 +182,30 @@ function drawReportTitle(cursor: PdfCursor, payload: AuditExportPayload): void {
 }
 
 function drawScoreSummary(cursor: PdfCursor, payload: AuditExportPayload): void {
-  const cardH = 68;
+  const cardH = 76;
   ensureSpace(cursor, cardH + 12);
   const cardTop = cursor.y;
+  const padX = 20;
+  const leftX = MARGIN + padX;
+  const scoreText = payload.score != null ? String(payload.score) : '—';
+  const scoreBaseline = cardTop + 44;
 
   cursor.doc.setFillColor(BRAND.r, BRAND.g, BRAND.b);
   cursor.doc.roundedRect(MARGIN, cardTop, cursor.contentWidth, cardH, 10, 10, 'F');
 
   cursor.doc.setTextColor(255, 255, 255);
   cursor.doc.setFont('helvetica', 'bold');
-  cursor.doc.setFontSize(34);
-  cursor.doc.text(`${payload.score ?? '—'}`, MARGIN + 18, cardTop + 38);
-  cursor.doc.setFontSize(16);
-  cursor.doc.text('/100', MARGIN + 18 + cursor.doc.getTextWidth(`${payload.score ?? '—'}`) + 4, cardTop + 38);
+  cursor.doc.setFontSize(36);
+  const scoreWidth = cursor.doc.getTextWidth(scoreText);
+  cursor.doc.text(scoreText, leftX, scoreBaseline);
 
+  // Measure suffix while score font is still active, then draw at smaller size.
   cursor.doc.setFont('helvetica', 'normal');
+  cursor.doc.setFontSize(15);
+  cursor.doc.text('/100', leftX + scoreWidth + 10, scoreBaseline - 1);
+
   cursor.doc.setFontSize(11);
-  cursor.doc.text('GBP Optimization Score', MARGIN + 18, cardTop + 54);
+  cursor.doc.text('GBP Optimization Score', leftX, cardTop + 62);
 
   const auditedLabel = payload.auditedAt
     ? new Date(payload.auditedAt).toLocaleString(undefined, {
@@ -206,10 +213,13 @@ function drawScoreSummary(cursor: PdfCursor, payload: AuditExportPayload): void 
         timeStyle: 'short',
       })
     : '—';
+  const rightX = cursor.pageWidth - MARGIN - padX;
+  cursor.doc.setFont('helvetica', 'normal');
   cursor.doc.setFontSize(10);
-  cursor.doc.text('Audited', cursor.pageWidth - MARGIN - 18, cardTop + 28, { align: 'right' });
+  cursor.doc.text('Audited', rightX, cardTop + 30, { align: 'right' });
   cursor.doc.setFont('helvetica', 'bold');
-  cursor.doc.text(auditedLabel, cursor.pageWidth - MARGIN - 18, cardTop + 42, { align: 'right' });
+  cursor.doc.setFontSize(11);
+  cursor.doc.text(auditedLabel, rightX, cardTop + 46, { align: 'right' });
 
   cursor.y = cardTop + cardH + 14;
 }
