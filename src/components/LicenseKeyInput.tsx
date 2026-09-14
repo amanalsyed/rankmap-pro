@@ -198,7 +198,7 @@ export default function LicenseKeyInput({ onSuccess, onActivated, onCancel }: Li
           Don't have a license key?
         </p>
         <a
-          href="https://www.creem.io/test/payment/prod_7DxgW3XhvPE2aPSZhKk0u8"
+          href="https://www.creem.io/payment/prod_3Jo8Eof8Rme7XdxHktib8h"
           target="_blank"
           rel="noopener noreferrer"
           style={{

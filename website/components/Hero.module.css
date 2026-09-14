@@ -68,7 +68,15 @@
   flex-wrap: wrap;
   gap: 12px;
   justify-content: center;
-  margin-bottom: 48px;
+  margin-bottom: 16px;
+}
+
+.comingSoon {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.65;
+  max-width: 560px;
+  margin-bottom: 40px;
 }
 
 .ctas .btn-primary {

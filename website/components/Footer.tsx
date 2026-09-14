@@ -19,7 +19,7 @@ export default function Footer() {
             <a href="#who-its-for">Who it&apos;s for</a>
             <a href="#features">Features</a>
             <a href="#pricing">Pricing</a>
-            <a href="#install">Install</a>
+            <a href="#install">Launch status</a>
           </div>
           <div>
             <span className={styles.groupLabel}>Legal</span>

@@ -1,4 +1,4 @@
-import { PLANS, SITE } from '@/content/site';
+import { CREEM_CHECKOUT_URL, PLANS, SITE } from '@/content/site';
 
 import Reveal from './Reveal';
 
@@ -177,12 +177,20 @@ export default function Pricing() {
 
                   </ul>
 
-                  <a
-                    href="#install"
-                    className={plan.highlighted ? 'btn btn-primary' : 'btn btn-secondary'}
-                  >
-                    {plan.cta}
-                  </a>
+                  {plan.id === 'lifetime' ? (
+                    <a
+                      href={CREEM_CHECKOUT_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-primary"
+                    >
+                      {plan.cta}
+                    </a>
+                  ) : (
+                    <span className="btn btn-secondary btn-disabled" aria-disabled="true">
+                      {plan.cta}
+                    </span>
+                  )}
 
                   {plan.id === 'lifetime' ? (
                     <p className={styles.cardGuarantee}>{SITE.moneyBackGuarantee}</p>
@@ -203,9 +211,9 @@ export default function Pricing() {
         <Reveal delay={200}>
           <p className={styles.guarantee}>{SITE.moneyBackGuarantee}</p>
           <p className={styles.note}>
-            After purchasing Lifetime, you'll receive a license key via email. Enter it in the
-            extension (Settings → Account → Activate License) to unlock unlimited access. Each
-            license can be transferred between devices.
+            After purchasing Lifetime, you&apos;ll receive a license key via email. When the Chrome
+            extension launches, install it from the Web Store and activate your key in Settings →
+            Account. Each license can be transferred between devices.
           </p>
         </Reveal>
 

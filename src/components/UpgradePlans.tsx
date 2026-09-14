@@ -7,7 +7,7 @@ interface UpgradePlansProps {
   onLicenseActivated?: () => void;
 }
 
-const CREEM_CHECKOUT_URL = 'https://www.creem.io/test/payment/prod_7DxgW3XhvPE2aPSZhKk0u8';
+const CREEM_CHECKOUT_URL = 'https://www.creem.io/payment/prod_3Jo8Eof8Rme7XdxHktib8h';
 const LIFETIME_PRICE = '$19';
 const LIFETIME_COMPARE_AT = '$29';
 const MONEY_BACK_GUARANTEE = '14-day money-back guarantee — no questions asked.';

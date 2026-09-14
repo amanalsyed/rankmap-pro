@@ -169,7 +169,7 @@ export const STEPS = [
   {
     step: '01',
     title: 'Install the extension',
-    description: 'Add RankMap Pro to Chrome. Start free with monthly limits, or purchase a lifetime license key for unlimited access — just enter your key to activate.',
+    description: 'Purchase a Lifetime license key now. When the Chrome extension launches, install from the Web Store and activate your key in Settings → Account.',
   },
   {
     step: '02',
@@ -239,7 +239,7 @@ export const PLANS = [
       '1 CSV export / month',
       '1 rank-check pin',
     ],
-    cta: 'Install free',
+    cta: 'Coming soon',
     highlighted: false,
   },
   {
@@ -266,8 +266,12 @@ export const PLANS = [
 
 export const FAQ = [
   {
+    q: 'Is the Chrome extension available yet?',
+    a: 'The RankMap Pro Chrome extension is coming soon to the Chrome Web Store. You can purchase Lifetime access now — you\'ll receive a license key by email and activate it in the extension as soon as it launches.',
+  },
+  {
     q: 'Does RankMap Pro work on Google Maps?',
-    a: 'Yes. RankMap Pro runs directly on Google Maps and Google Search results pages. Install the extension, open Maps, and use the built-in tools from any listing or search.',
+    a: 'Yes. RankMap Pro runs directly on Google Maps and Google Search results pages. Once the extension is installed from the Chrome Web Store, open Maps and use the built-in tools from any listing or search.',
   },
   {
     q: 'Is there a free plan?',
@@ -311,4 +315,12 @@ export const FAQ = [
   },
 ] as const;
 
-export const CHROME_STORE_URL = '#install';
+/** Live Creem checkout for Lifetime plan (production). */
+export const CREEM_CHECKOUT_URL =
+  'https://www.creem.io/payment/prod_3Jo8Eof8Rme7XdxHktib8h';
+
+/** Chrome Web Store listing — set when published; null while extension is not live. */
+export const CHROME_STORE_URL: string | null = null;
+
+export const EXTENSION_COMING_SOON =
+  'Chrome extension coming soon to the Web Store. Purchase Lifetime now — your license key is delivered instantly by email.';

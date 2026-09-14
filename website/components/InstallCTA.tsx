@@ -1,4 +1,4 @@
-import { SITE } from '@/content/site';
+import { CREEM_CHECKOUT_URL, EXTENSION_COMING_SOON, SITE } from '@/content/site';
 import Reveal from './Reveal';
 import styles from './InstallCTA.module.css';
 
@@ -9,23 +9,26 @@ export default function InstallCTA() {
         <div className={styles.card}>
           <div className={styles.glow} aria-hidden="true" />
           <div className={styles.content}>
-            <h2>Ready to find your next local SEO client?</h2>
-            <p>
-              Install RankMap Pro on Chrome, sign in, and start scanning Google Maps in under a
-              minute.
-            </p>
+            <span className={styles.badge}>Coming soon</span>
+            <h2>Chrome extension launching on the Web Store</h2>
+            <p>{EXTENSION_COMING_SOON}</p>
             <div className={styles.actions}>
-              <a href="#" className="btn btn-primary">
-                Add to Chrome
+              <a
+                href={CREEM_CHECKOUT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-primary"
+              >
+                Get Lifetime Access — $19
               </a>
               <a href={`mailto:${SITE.email}`} className="btn btn-secondary">
                 Contact us
               </a>
             </div>
             <ol className={styles.steps}>
-              <li>Open Chrome → Extensions → Developer mode</li>
-              <li>Load unpacked → select the extension folder</li>
-              <li>Or install from Chrome Web Store when published</li>
+              <li>Purchase Lifetime — secure checkout via Creem.io</li>
+              <li>Receive your license key by email instantly</li>
+              <li>Install from the Chrome Web Store when we launch, then activate your key</li>
             </ol>
           </div>
         </div>

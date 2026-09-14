@@ -1,4 +1,4 @@
-import { SITE } from '@/content/site';
+import { CREEM_CHECKOUT_URL, EXTENSION_COMING_SOON, SITE } from '@/content/site';
 import styles from './Hero.module.css';
 
 export default function Hero() {
@@ -7,7 +7,7 @@ export default function Hero() {
       <div className={`container ${styles.inner}`}>
         <div className={`${styles.badge} animate-in`}>
           <span className={styles.badgeDot} />
-          Chrome extension · Google Maps
+          Chrome extension · Coming soon · Google Maps
         </div>
 
         <h1 className={`${styles.title} animate-in animate-in-delay-1`}>
@@ -20,13 +20,25 @@ export default function Hero() {
         </p>
 
         <div className={`${styles.ctas} animate-in animate-in-delay-3`}>
-          <a href="#install" className="btn btn-primary">
-            Add to Chrome — Free
+          <a
+            href={CREEM_CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-primary"
+          >
+            Get Lifetime — $19
           </a>
+          <span className="btn btn-secondary btn-disabled" aria-disabled="true">
+            Chrome extension — Coming soon
+          </span>
           <a href="#features" className="btn btn-secondary">
             See all features
           </a>
         </div>
+
+        <p className={`${styles.comingSoon} animate-in animate-in-delay-3`}>
+          {EXTENSION_COMING_SOON}
+        </p>
 
         <ul className={`${styles.stats} animate-in animate-in-delay-4`}>
           <li>

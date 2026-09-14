@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { SITE } from '@/content/site';
+import { CREEM_CHECKOUT_URL, SITE } from '@/content/site';
 import styles from './Navbar.module.css';
 
 const LINKS = [
@@ -35,8 +35,13 @@ export default function Navbar() {
         </nav>
 
         <div className={styles.actions}>
-          <a href="#install" className={`btn btn-primary ${styles.cta}`}>
-            Add to Chrome
+          <a
+            href={CREEM_CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`btn btn-primary ${styles.cta}`}
+          >
+            Get Lifetime
           </a>
           <button
             type="button"

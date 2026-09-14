@@ -117,15 +117,15 @@ serve(async (req) => {
       );
     }
     
-    // Verify signature (temporarily disabled for debugging)
-    // const isValid = verifyWebhookSignature(rawBody, signature, webhookSecret);
-    // if (!isValid) {
-    //   console.error('[Creem Webhook] Invalid signature');
-    //   return new Response(
-    //     JSON.stringify({ error: 'Invalid signature' }),
-    //     { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    //   );
-    // }
+    Verify signature (temporarily disabled for debugging)
+    const isValid = verifyWebhookSignature(rawBody, signature, webhookSecret);
+    if (!isValid) {
+      console.error('[Creem Webhook] Invalid signature');
+      return new Response(
+        JSON.stringify({ error: 'Invalid signature' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
     
     console.log('[Creem Webhook] Received event:', {
       eventType: payload.eventType,
