@@ -63,6 +63,12 @@
 }
 
 @media (max-width: 768px) {
+  .inner {
+    width: 100%;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
   .nav {
     display: none;
   }
