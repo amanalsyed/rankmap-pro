@@ -1,13 +1,15 @@
 import {
   formatWhiteLabelContact,
   isWhiteLabelActive,
+  isWhiteLabelVisibleOnAuditPage,
   type WhiteLabelSettings,
 } from '../settings/white-label-settings';
 
 export function AuditWhiteLabelBranding({ settings }: { settings: WhiteLabelSettings }) {
-  if (!isWhiteLabelActive(settings)) return null;
+  if (!isWhiteLabelVisibleOnAuditPage(settings)) return null;
 
   const contact = formatWhiteLabelContact(settings);
+  const showOnPdf = isWhiteLabelActive(settings);
 
   return (
     <>
@@ -24,11 +26,11 @@ export function AuditWhiteLabelBranding({ settings }: { settings: WhiteLabelSett
           <div className="audit-white-label-report-type">Google Business Profile Audit Report</div>
         </div>
       </header>
-      <p className="audit-white-label-hint no-print">Agency branding — shown on exported PDFs</p>
-      <footer className="audit-white-label-footer print-only" aria-hidden="true">
-        {settings.agencyName ? `Prepared by ${settings.agencyName}` : 'Prepared for your review'}
-        {settings.website ? ` · ${settings.website}` : contact ? ` · ${contact}` : ''}
-      </footer>
+      <p className="audit-white-label-hint no-print">
+        {showOnPdf
+          ? 'Agency branding — shown on this report and exported PDFs'
+          : 'Agency branding — shown on this report only'}
+      </p>
     </>
   );
 }

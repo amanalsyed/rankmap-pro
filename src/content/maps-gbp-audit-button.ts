@@ -29,6 +29,11 @@ import {
   safeRuntimeOnMessage,
   safeRuntimeSendMessage,
 } from './extension-context';
+import {
+  cleanRankCheckAddress,
+  cleanRankCheckBusinessName,
+  normalizeBusinessAgeLabel,
+} from '../utils/business-name';
 import { extractBusinessAge, extractLeadFromCard, extractPanelAddress, getAbsoluteMapsUrl, getListItemName } from './website-detector';
 import { resolveListingCoordinates } from './listing-coordinates';
 import { parsePlaceUrlLatLng } from './maps-id-utils';
@@ -861,6 +866,12 @@ function rankCheckKeyword(searchQuery: string, category: string, address: string
   return cat || query;
 }
 
+function panelBusinessName(panel: HTMLElement): string {
+  return cleanRankCheckBusinessName(
+    panel.querySelector('h1.DUwDvf, h1.fontHeadlineLarge')?.textContent?.trim() ?? ''
+  );
+}
+
 async function handleRankCheckButtonClick(btn: HTMLButtonElement): Promise<void> {
   if (!isExtensionContextValid()) {
     handleInvalidExtensionContext(notifyExtensionReloadNeeded);
@@ -872,18 +883,31 @@ async function handleRankCheckButtonClick(btn: HTMLButtonElement): Promise<void>
   if (!placeId) return;
 
   const wrap = btn.closest('.nwf-gbp-audit-wrap') as HTMLElement | null;
-  const card =
-    (wrap ? getResultCard(wrap) : null) ??
-    (wrap?.closest('[data-item-id], .Nv2PK, .VkpGBb, .rllt__link') as HTMLElement | null) ??
-    (btn.closest('[data-item-id], .Nv2PK, .VkpGBb, .rllt__link') as HTMLElement | null);
-
+  const isDetail = wrap?.getAttribute(AUDIT_SCOPE_ATTR) === 'detail';
   const panel = getBusinessPanel();
+
+  let card: HTMLElement | null = null;
+  if (!isDetail) {
+    card =
+      (wrap ? getResultCard(wrap) : null) ??
+      (wrap?.closest('[data-item-id], .Nv2PK, .VkpGBb, .rllt__link') as HTMLElement | null) ??
+      (btn.closest('[data-item-id], .Nv2PK, .VkpGBb, .rllt__link') as HTMLElement | null);
+  }
+
   const lead = card ? extractLeadFromCard(card, placeId, null) : null;
-  const panelName =
-    panel?.querySelector('h1.DUwDvf, h1.fontHeadlineLarge, h1')?.textContent?.trim() ?? '';
-  const businessName = (lead?.name || (card ? getListItemName(card) : '') || panelName).trim();
-  const address = (lead?.address || extractPanelAddress() || '').trim();
-  const businessAge = card ? extractBusinessAge(card) : '';
+  const panelName = panel ? panelBusinessName(panel) : '';
+
+  let businessName = isDetail
+    ? panelName
+    : cleanRankCheckBusinessName(lead?.name || (card ? getListItemName(card) : '') || panelName);
+  if (!businessName && panelName) businessName = panelName;
+
+  let address = isDetail
+    ? cleanRankCheckAddress(extractPanelAddress())
+    : cleanRankCheckAddress(lead?.address || extractPanelAddress() || '');
+  const businessAge = normalizeBusinessAgeLabel(
+    isDetail && panel ? extractBusinessAge(panel) : card ? extractBusinessAge(card) : ''
+  );
   const category = (lead?.category || '').trim();
   const keyword = rankCheckKeyword(readSearchQuery(), category, address);
 

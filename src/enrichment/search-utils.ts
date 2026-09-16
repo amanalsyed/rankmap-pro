@@ -307,11 +307,80 @@ export function socialProfileMatchesBusiness(
   return businessMatchesContext(text, lead);
 }
 
+const OWNER_NAME_WORD = '[A-Z][a-z][a-z\'-.]*';
+const OWNER_NAME = `${OWNER_NAME_WORD}(?:\\s+${OWNER_NAME_WORD}){1,3}`;
+
+/** SERP / LinkedIn boilerplate that is often captured after a stray "Owner" token. */
+const OWNER_NAME_STOP_WORDS = new Set([
+  'profile',
+  'view',
+  'linkedin',
+  'professional',
+  'network',
+  'business',
+  'company',
+  'full',
+  'connect',
+  'sign',
+  'login',
+  'website',
+  'page',
+  'email',
+  'phone',
+  'contact',
+  'services',
+  'local',
+  'directory',
+  'listing',
+  'read',
+  'more',
+  'see',
+  'click',
+  'here',
+  'about',
+  'official',
+  'verified',
+  'welcome',
+  'learn',
+  'member',
+  'public',
+  'account',
+  'search',
+  'results',
+  'people',
+  'employees',
+  'staff',
+  'team',
+]);
+
+function isPlausibleOwnerName(name: string): boolean {
+  const trimmed = name.trim().replace(/\s+/g, ' ');
+  if (!trimmed) return false;
+
+  const words = trimmed.split(' ');
+  if (words.length < 2 || words.length > 4) return false;
+
+  for (const word of words) {
+    const normalized = word.toLowerCase().replace(/[^a-z'-]/g, '');
+    if (normalized.length < 2) return false;
+    if (OWNER_NAME_STOP_WORDS.has(normalized)) return false;
+    if (!/^[A-Z][a-z'-.]*[a-z.-]$|^[A-Z]\.$/.test(word)) return false;
+  }
+
+  return true;
+}
+
 const OWNER_PATTERNS = [
-  /(?:owner|founder|co-founder|ceo|president|proprietor|managing director)[:\s-]+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})/i,
-  /([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2}),?\s+(?:owner|founder|ceo|president)\s+of/i,
-  /(?:owned by|founded by|run by)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})/i,
-  /([A-Z][a-z]+(?:\s+[A-Z][a-z]+){1,2})\s+-\s+(?:owner|founder|ceo)/i,
+  // LinkedIn / SERP titles: "Jane Doe - Owner - Company | LinkedIn"
+  new RegExp(`(${OWNER_NAME})\\s+[-–|]\\s+[^\\n|]{0,80}\\b(?:owner|founder|ceo|president)\\b`, 'i'),
+  /(?:owned by|founded by|run by)\s+([A-Z][a-z][a-z'-.]*(?:\s+[A-Z][a-z][a-z'-.]*){1,3})/i,
+  /([A-Z][a-z][a-z'-.]*(?:\s+[A-Z][a-z][a-z'-.]*){1,3}),?\s+(?:owner|founder|ceo|president)\s+of\b/i,
+  /([A-Z][a-z][a-z'-.]*(?:\s+[A-Z][a-z][a-z'-.]*){1,3})\s+-\s+(?:owner|founder|ceo)\b/i,
+  // Avoid "Business Owner profile on Professional …"
+  new RegExp(
+    `(?<!(?:business|company|profile)\\s)(?:owner|founder|co-founder|ceo|president|proprietor|managing director)[:\\s-]+(${OWNER_NAME})\\b`,
+    'i'
+  ),
 ];
 
 const TITLE_PATTERNS = [
@@ -331,16 +400,16 @@ export function extractOwnerInfo(
   let name = '';
   for (const pattern of OWNER_PATTERNS) {
     const match = text.match(pattern);
-    if (match?.[1]) {
-      name = match[1].trim();
-      break;
-    }
+    if (!match?.[1]) continue;
+    const candidate = match[1].trim().replace(/\s+/g, ' ');
+    if (!isPlausibleOwnerName(candidate)) continue;
+    name = candidate;
+    break;
   }
 
   if (!name) return null;
 
   if (lead.name.toLowerCase().includes(name.toLowerCase())) return null;
-  if (name.split(' ').length < 2) return null;
 
   let title = 'Owner';
   for (const { pattern, title: t } of TITLE_PATTERNS) {

@@ -3,6 +3,11 @@ import { MapContainer, TileLayer, Marker, Tooltip, useMapEvents } from 'react-le
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { usePlanCapabilities } from '../hooks/usePlanCapabilities';
+import {
+  cleanRankCheckAddress,
+  cleanRankCheckBusinessName,
+  normalizeBusinessAgeLabel,
+} from '../utils/business-name';
 
 const GRID_SIZE = 3;
 const GRID_SPACING_KM = 2;
@@ -379,9 +384,11 @@ function App() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const name = params.get('name') ?? '';
-    const address = (params.get('address') ?? '').replace(/^address not found$/i, '').trim();
-    const businessAge = params.get('businessAge') ?? '';
+    const name = cleanRankCheckBusinessName(params.get('name') ?? '');
+    const address = cleanRankCheckAddress(
+      (params.get('address') ?? '').replace(/^address not found$/i, '').trim()
+    );
+    const businessAge = normalizeBusinessAgeLabel(params.get('businessAge') ?? '');
     const lat = Number.parseFloat(params.get('lat') ?? '');
     const lng = Number.parseFloat(params.get('lng') ?? '');
     const defaultKeyword = params.get('keyword') ?? '';

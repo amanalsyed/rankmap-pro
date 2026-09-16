@@ -44,7 +44,12 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SEO.title,
     description: SEO.description,
-    images: [SEO.ogImage],
+    images: {
+      url: SEO.ogImage,
+      width: SEO.ogImageWidth,
+      height: SEO.ogImageHeight,
+      alt: SEO.ogImageAlt,
+    },
   },
   alternates: {
     canonical: SITE.url,

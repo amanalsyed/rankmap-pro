@@ -41,9 +41,16 @@ export default function SettingsPanel() {
   const searchEnrichmentOn = enrichmentSearchEnabled(enrichment.settings);
   const auditEnrichmentLocked = !capabilities.auditEnrichmentEnabled;
   const whiteLabelLocked = !capabilities.whiteLabelEnabled;
+  const whiteLabelFieldsEnabled =
+    !whiteLabelLocked &&
+    (whiteLabel.settings.enabled || whiteLabel.settings.showOnAuditPage);
 
   const handleSaveAll = () => {
     void Promise.all([enrichment.save(enrichment.settings), whiteLabel.save(whiteLabel.settings)]);
+  };
+
+  const saveWhiteLabelPatch = (patch: Partial<typeof whiteLabel.settings>) => {
+    void whiteLabel.save({ ...whiteLabel.settings, ...patch });
   };
 
   const handleLogoChange = useCallback(
@@ -87,10 +94,10 @@ export default function SettingsPanel() {
       <AccountPanel />
 
       <section className="settings-section">
-        <h2>PDF / White-label branding</h2>
+        <h2>White-label branding</h2>
         <p className="settings-hint">
-          Add your agency name, logo, and contact details to exported audit PDFs — ideal when sending
-          reports to prospects.
+          Add your agency name, logo, and contact details to audit reports in the extension and on
+          exported PDFs — ideal when sending reports to prospects.
         </p>
         {whiteLabelLocked ? (
           <p className="settings-plan-lock">{upgradeMessage('White-label audit PDFs')}</p>
@@ -99,13 +106,29 @@ export default function SettingsPanel() {
         <label className="settings-toggle">
           <input
             type="checkbox"
+            checked={whiteLabel.settings.showOnAuditPage}
+            onChange={(e) => saveWhiteLabelPatch({ showOnAuditPage: e.target.checked })}
+            disabled={whiteLabelLocked}
+          />
+          <span>
+            <strong>Show agency branding on audit page</strong>
+            <small>
+              When enabled, your logo and contact info appear at the top of the audit report while
+              viewing it in the extension.
+            </small>
+          </span>
+        </label>
+
+        <label className="settings-toggle">
+          <input
+            type="checkbox"
             checked={whiteLabel.settings.enabled}
-            onChange={(e) => whiteLabel.updateSettings({ enabled: e.target.checked })}
+            onChange={(e) => saveWhiteLabelPatch({ enabled: e.target.checked })}
             disabled={whiteLabelLocked}
           />
           <span>
             <strong>Show agency branding on audit PDFs</strong>
-            <small>When enabled, your logo and contact info appear at the top of printed audit reports.</small>
+            <small>When enabled, your logo and contact info appear at the top of exported audit PDFs.</small>
           </span>
         </label>
 
@@ -117,7 +140,7 @@ export default function SettingsPanel() {
             value={whiteLabel.settings.agencyName}
             onChange={(e) => whiteLabel.updateSettings({ agencyName: e.target.value })}
             placeholder="Acme Digital Marketing"
-            disabled={!whiteLabel.settings.enabled || whiteLabelLocked}
+            disabled={!whiteLabelFieldsEnabled}
           />
         </label>
 
@@ -129,7 +152,7 @@ export default function SettingsPanel() {
             value={whiteLabel.settings.tagline}
             onChange={(e) => whiteLabel.updateSettings({ tagline: e.target.value })}
             placeholder="Helping local businesses grow online"
-            disabled={!whiteLabel.settings.enabled || whiteLabelLocked}
+            disabled={!whiteLabelFieldsEnabled}
           />
         </label>
 
@@ -150,7 +173,7 @@ export default function SettingsPanel() {
                 type="button"
                 className="btn-secondary"
                 onClick={() => logoInputRef.current?.click()}
-                disabled={!whiteLabel.settings.enabled || whiteLabelLocked}
+                disabled={!whiteLabelFieldsEnabled}
               >
                 Upload logo
               </button>
@@ -159,7 +182,7 @@ export default function SettingsPanel() {
                   type="button"
                   className="btn-secondary"
                   onClick={() => whiteLabel.updateSettings({ logoDataUrl: '' })}
-                  disabled={!whiteLabel.settings.enabled || whiteLabelLocked}
+                  disabled={!whiteLabelFieldsEnabled}
                 >
                   Remove
                 </button>
@@ -185,7 +208,7 @@ export default function SettingsPanel() {
             value={whiteLabel.settings.contactEmail}
             onChange={(e) => whiteLabel.updateSettings({ contactEmail: e.target.value })}
             placeholder="hello@agency.com"
-            disabled={!whiteLabel.settings.enabled || whiteLabelLocked}
+            disabled={!whiteLabelFieldsEnabled}
           />
         </label>
 
@@ -197,7 +220,7 @@ export default function SettingsPanel() {
             value={whiteLabel.settings.contactPhone}
             onChange={(e) => whiteLabel.updateSettings({ contactPhone: e.target.value })}
             placeholder="(555) 123-4567"
-            disabled={!whiteLabel.settings.enabled || whiteLabelLocked}
+            disabled={!whiteLabelFieldsEnabled}
           />
         </label>
 
@@ -209,7 +232,7 @@ export default function SettingsPanel() {
             value={whiteLabel.settings.website}
             onChange={(e) => whiteLabel.updateSettings({ website: e.target.value })}
             placeholder="https://agency.com"
-            disabled={!whiteLabel.settings.enabled || whiteLabelLocked}
+            disabled={!whiteLabelFieldsEnabled}
           />
         </label>
       </section>

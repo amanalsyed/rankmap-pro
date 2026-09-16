@@ -1,7 +1,8 @@
+/** Canonical site URL (www) — must match Vercel primary domain to avoid OG image redirect failures on X. */
 export const SITE = {
   name: 'RankMap Pro',
   domain: 'rankmappro.com',
-  url: 'https://rankmappro.com',
+  url: 'https://www.rankmappro.com',
   email: 'rankmappro@gmail.com',
   tagline:
     'A Chrome extension that adds lead finding, GBP audits, rank checking, and competitive scans directly into Google Maps.',
@@ -19,7 +20,7 @@ export const SEO = {
   title: 'RankMap Pro — Local SEO Tools for Google Maps',
   description:
     'Find no-website leads on Google Maps. Run GBP audits, rank checks, and competitor scans. Chrome extension for local SEO pros. Start free.',
-  ogImage: '/og-image.png',
+  ogImage: 'https://www.rankmappro.com/og-image.png',
   ogImageWidth: 1400,
   ogImageHeight: 560,
   ogImageAlt: 'RankMap Pro — local SEO tools for Google Maps: leads, GBP audits, rank checks',

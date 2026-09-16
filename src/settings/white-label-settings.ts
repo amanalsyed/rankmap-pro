@@ -1,6 +1,8 @@
 export interface WhiteLabelSettings {
   /** Show agency branding on exported audit PDFs. */
   enabled: boolean;
+  /** Show agency branding at the top of the audit report page in the extension. */
+  showOnAuditPage: boolean;
   agencyName: string;
   tagline: string;
   /** Base64 data URL (png/jpeg/webp), max ~200 KB. */
@@ -14,6 +16,7 @@ export const WHITE_LABEL_SETTINGS_KEY = 'whiteLabelSettings';
 
 export const DEFAULT_WHITE_LABEL_SETTINGS: WhiteLabelSettings = {
   enabled: false,
+  showOnAuditPage: true,
   agencyName: '',
   tagline: '',
   logoDataUrl: '',
@@ -40,6 +43,8 @@ export function normalizeWhiteLabelSettings(
 
   return {
     enabled: typeof raw?.enabled === 'boolean' ? raw.enabled : defaults.enabled,
+    showOnAuditPage:
+      typeof raw?.showOnAuditPage === 'boolean' ? raw.showOnAuditPage : defaults.showOnAuditPage,
     agencyName: trimField(raw?.agencyName, 120),
     tagline: trimField(raw?.tagline, 200),
     logoDataUrl,
@@ -49,8 +54,7 @@ export function normalizeWhiteLabelSettings(
   };
 }
 
-export function isWhiteLabelActive(settings: WhiteLabelSettings): boolean {
-  if (!settings.enabled) return false;
+export function hasWhiteLabelContent(settings: WhiteLabelSettings): boolean {
   return Boolean(
     settings.agencyName ||
       settings.logoDataUrl ||
@@ -58,6 +62,16 @@ export function isWhiteLabelActive(settings: WhiteLabelSettings): boolean {
       settings.contactPhone ||
       settings.website
   );
+}
+
+/** Agency branding on exported audit PDFs / CSV metadata. */
+export function isWhiteLabelActive(settings: WhiteLabelSettings): boolean {
+  return settings.enabled && hasWhiteLabelContent(settings);
+}
+
+/** Agency branding header on the in-extension audit report page. */
+export function isWhiteLabelVisibleOnAuditPage(settings: WhiteLabelSettings): boolean {
+  return settings.showOnAuditPage && hasWhiteLabelContent(settings);
 }
 
 export function formatWhiteLabelContact(settings: WhiteLabelSettings): string {

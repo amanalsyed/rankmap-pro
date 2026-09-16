@@ -39,3 +39,51 @@ export function cleanBusinessName(value: string): string {
 
   return cleaned;
 }
+
+const RANK_CHECK_JUNK_LABEL =
+  /^(?:popular times|overview|reviews|about|photos|updates|directions|save|share|nearby|order online|website)$/i;
+
+const RANK_CHECK_GLUED_UI_RE =
+  /see photos|\d\.\d\s*\([\d,]+\)|\breviews?\b|\bopen now\b|\bclosed\b/i;
+
+/** Maps tab labels and glued card text should never become the rank-check title. */
+export function cleanRankCheckBusinessName(value: string): string {
+  let name = cleanBusinessName(value.replace(/\s+/g, ' ').trim());
+  if (!name || RANK_CHECK_JUNK_LABEL.test(name)) return '';
+
+  if (RANK_CHECK_GLUED_UI_RE.test(name)) {
+    name = cleanBusinessName(name.split(/see photos/i)[0] ?? name);
+    name = cleanBusinessName(name.split(/\d\.\d\s*\(/)[0] ?? name);
+  }
+
+  const segments = name
+    .split(/\s*[·•|]\s*/)
+    .map((part) => cleanBusinessName(part))
+    .filter((part) => part && !RANK_CHECK_JUNK_LABEL.test(part) && !RANK_CHECK_GLUED_UI_RE.test(part));
+
+  if (segments.length > 1) {
+    name = segments.sort((a, b) => b.length - a.length)[0] ?? name;
+  }
+
+  name = cleanBusinessName(name);
+  if (!name || RANK_CHECK_JUNK_LABEL.test(name)) return '';
+  if (name.length > 120) return cleanBusinessName(name.slice(0, 120));
+
+  return name;
+}
+
+/** Drop listing-card blobs that sometimes get mistaken for an address. */
+export function cleanRankCheckAddress(value: string): string {
+  const address = value.replace(/\s+/g, ' ').trim();
+  if (!address) return '';
+  if (RANK_CHECK_JUNK_LABEL.test(address)) return '';
+  if (RANK_CHECK_GLUED_UI_RE.test(address)) return '';
+  if (address.length > 200) return '';
+  if (!/[,\d]/.test(address) && address.length > 80) return '';
+  return address;
+}
+
+export function normalizeBusinessAgeLabel(value: string): string {
+  const match = value.replace(/\s+/g, ' ').trim().match(/(\d+\+?\s*years?\s+in\s+business)/i);
+  return match?.[1] ?? '';
+}
