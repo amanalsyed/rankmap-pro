@@ -16,8 +16,9 @@ export default function Footer() {
         <div className={styles.links}>
           <div>
             <span className={styles.groupLabel}>Product</span>
-            <a href="#who-its-for">Who it&apos;s for</a>
             <a href="#features">Features</a>
+            <a href="#how-it-works">How it works</a>
+            <a href="#who-its-for">Who it&apos;s for</a>
             <a href="#pricing">Pricing</a>
             <a href="#install">Launch status</a>
           </div>

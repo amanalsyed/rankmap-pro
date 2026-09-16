@@ -11,9 +11,9 @@ export default function HomePage() {
   return (
     <>
       <Hero />
-      <WhoIsItFor />
       <Features />
       <HowItWorks />
+      <WhoIsItFor />
       <Pricing />
       <FAQSection />
       <ContactForm />

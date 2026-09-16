@@ -7,9 +7,9 @@ import { CREEM_CHECKOUT_URL, SITE } from '@/content/site';
 import styles from './Navbar.module.css';
 
 const LINKS = [
-  { href: '#who-its-for', label: 'Who it\'s for' },
   { href: '#features', label: 'Features' },
   { href: '#how-it-works', label: 'How it works' },
+  { href: '#who-its-for', label: 'Who it\'s for' },
   { href: '#pricing', label: 'Pricing' },
   { href: '#faq', label: 'FAQ' },
   { href: '#contact', label: 'Contact' },
