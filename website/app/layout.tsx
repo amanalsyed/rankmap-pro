@@ -31,25 +31,11 @@ export const metadata: Metadata = {
     siteName: SITE.name,
     type: 'website',
     locale: 'en_US',
-    images: [
-      {
-        url: SEO.ogImage,
-        width: SEO.ogImageWidth,
-        height: SEO.ogImageHeight,
-        alt: SEO.ogImageAlt,
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: SEO.title,
     description: SEO.description,
-    images: {
-      url: SEO.ogImage,
-      width: SEO.ogImageWidth,
-      height: SEO.ogImageHeight,
-      alt: SEO.ogImageAlt,
-    },
   },
   alternates: {
     canonical: SITE.url,

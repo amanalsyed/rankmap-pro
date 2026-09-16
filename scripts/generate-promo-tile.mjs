@@ -26,8 +26,5 @@ for (const tile of tiles) {
   console.log(`Wrote ${pngPath} (${png.length} bytes, ${tile.width}px wide)`);
 }
 
-// Keep website OG image in sync with marquee tile
-const ogPath = join(root, 'website', 'public', 'og-image.png');
-const marqueePng = readFileSync(join(storeDir, 'promo-marquee-1400x560.png'));
-writeFileSync(ogPath, marqueePng);
-console.log(`Synced ${ogPath}`);
+// Regenerate 1200×630 social images (X/Twitter recommended ratio)
+await import('./generate-og-social.mjs');

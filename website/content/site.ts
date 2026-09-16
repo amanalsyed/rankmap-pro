@@ -21,8 +21,8 @@ export const SEO = {
   description:
     'Find no-website leads on Google Maps. Run GBP audits, rank checks, and competitor scans. Chrome extension for local SEO pros. Start free.',
   ogImage: 'https://www.rankmappro.com/og-image.png',
-  ogImageWidth: 1400,
-  ogImageHeight: 560,
+  ogImageWidth: 1200,
+  ogImageHeight: 630,
   ogImageAlt: 'RankMap Pro — local SEO tools for Google Maps: leads, GBP audits, rank checks',
 } as const;
 
