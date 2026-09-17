@@ -1,4 +1,4 @@
-import { CREEM_CHECKOUT_URL, PLANS, SITE } from '@/content/site';
+import { CHROME_STORE_URL, CREEM_CHECKOUT_URL, LIFETIME_PRICING, PLANS, SITE } from '@/content/site';
 
 import Reveal from './Reveal';
 
@@ -81,7 +81,11 @@ export default function Pricing() {
                         <span className={styles.popular}>Most popular</span>
                       ) : null}
                       {'limitedTime' in plan && plan.limitedTime ? (
-                        <span className={styles.limited}>Launch price</span>
+                        <span className={styles.limited}>
+                          {'launchDiscount' in plan && plan.launchDiscount
+                            ? plan.launchDiscount
+                            : 'Launch price'}
+                        </span>
                       ) : null}
                     </div>
                   ) : null}
@@ -184,6 +188,15 @@ export default function Pricing() {
                       rel="noopener noreferrer"
                       className="btn btn-primary"
                     >
+                      {plan.cta} — {LIFETIME_PRICING.priceLabel}
+                    </a>
+                  ) : CHROME_STORE_URL ? (
+                    <a
+                      href={CHROME_STORE_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-secondary"
+                    >
                       {plan.cta}
                     </a>
                   ) : (
@@ -211,9 +224,10 @@ export default function Pricing() {
         <Reveal delay={200}>
           <p className={styles.guarantee}>{SITE.moneyBackGuarantee}</p>
           <p className={styles.note}>
-            After purchasing Lifetime, you&apos;ll receive a license key via email. When the Chrome
-            extension launches, install it from the Web Store and activate your key in Settings →
-            Account. Each license can be transferred between devices.
+            Install free from the Chrome Web Store, or purchase Lifetime for{' '}
+            {LIFETIME_PRICING.priceLabel} ({LIFETIME_PRICING.discountLabel} the regular{' '}
+            {LIFETIME_PRICING.compareAtLabel}). Your license key arrives by email — activate it in
+            Settings → Account. Each license can be transferred between devices.
           </p>
         </Reveal>
 

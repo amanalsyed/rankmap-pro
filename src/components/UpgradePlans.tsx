@@ -8,8 +8,9 @@ interface UpgradePlansProps {
 }
 
 const CREEM_CHECKOUT_URL = 'https://www.creem.io/payment/prod_3Jo8Eof8Rme7XdxHktib8h';
-const LIFETIME_PRICE = '$19';
-const LIFETIME_COMPARE_AT = '$29';
+const LIFETIME_PRICE = '$9';
+const LIFETIME_COMPARE_AT = '$19';
+const LIFETIME_DISCOUNT = '50% off';
 const MONEY_BACK_GUARANTEE = '14-day money-back guarantee — no questions asked.';
 
 const FREE_FEATURES = [
@@ -60,7 +61,7 @@ export default function UpgradePlans({ currentPlan, onLicenseActivated }: Upgrad
     <div className="account-upgrade" id="upgrade">
       <h3>Plans</h3>
       <p className="settings-hint">
-        Launch price — one-time payment, lifetime access. Payments processed by Creem.io.
+        {LIFETIME_DISCOUNT} launch price — one-time payment, lifetime access. Payments processed by Creem.io.
       </p>
 
       <div className="plan-cards">
@@ -80,7 +81,7 @@ export default function UpgradePlans({ currentPlan, onLicenseActivated }: Upgrad
         <article
           className={`plan-card plan-card-lifetime${currentPlan === 'lifetime' ? ' is-current' : ''}`}
         >
-          <span className="plan-limited-badge">Launch price</span>
+          <span className="plan-limited-badge">{LIFETIME_DISCOUNT}</span>
           <div className="plan-card-head">
             <strong>Lifetime Pro</strong>
             <span className="plan-price">
@@ -88,7 +89,7 @@ export default function UpgradePlans({ currentPlan, onLicenseActivated }: Upgrad
               <s className="plan-price-compare">{LIFETIME_COMPARE_AT}</s>
             </span>
           </div>
-          <p className="plan-lifetime-note">Pre-launch offer · regular {LIFETIME_COMPARE_AT} · all features unlimited</p>
+          <p className="plan-lifetime-note">Launch offer · regular {LIFETIME_COMPARE_AT} · all features unlimited</p>
           <ul className="plan-feature-list">
             {LIFETIME_FEATURES.map((item) => (
               <li key={item}>{item}</li>

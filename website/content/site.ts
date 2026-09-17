@@ -181,7 +181,7 @@ export const STEPS = [
   {
     step: '01',
     title: 'Install the extension',
-    description: 'Purchase a Lifetime license key now. When the Chrome extension launches, install from the Web Store and activate your key in Settings → Account.',
+    description: 'Add RankMap Pro from the Chrome Web Store — free tier works instantly. Purchase Lifetime anytime and activate your license key in Settings → Account.',
   },
   {
     step: '02',
@@ -221,7 +221,7 @@ export const AUDIENCES = [
     accent: '#059669',
     description:
       'Prospect and deliver from the same tab you already use — no expensive subscriptions or steep learning curves.',
-    bullets: ['Start free with monthly limits', 'Lifetime pay-once pricing ($19 launch)', 'Works directly on Google Maps'],
+    bullets: ['Start free with monthly limits', 'Lifetime pay-once pricing ($9 launch — 50% off)', 'Works directly on Google Maps'],
   },
   {
     id: 'outreach',
@@ -251,18 +251,19 @@ export const PLANS = [
       '1 CSV export / month',
       '1 rank-check pin',
     ],
-    cta: 'Coming soon',
+    cta: 'Install free',
     highlighted: false,
   },
   {
     id: 'lifetime',
     name: 'Lifetime',
-    price: 19,
-    priceLabel: '$19',
-    compareAtPrice: 29,
+    price: 9,
+    priceLabel: '$9',
+    compareAtPrice: 19,
+    launchDiscount: '50% off',
     period: 'one-time',
     limitedTime: true,
-    description: 'Launch price — every feature, unlimited. Pay once, use forever. Regular price $29.',
+    description: 'Launch price — 50% off. Every feature, unlimited. Pay once, use forever. Regular price $19.',
     features: [
       'Unlimited lead scans, GBP audits & deep profiles',
       'Unlimited quick Local Scans & CSV exports',
@@ -279,7 +280,7 @@ export const PLANS = [
 export const FAQ = [
   {
     q: 'Is the Chrome extension available yet?',
-    a: 'The RankMap Pro Chrome extension is coming soon to the Chrome Web Store. You can purchase Lifetime access now — you\'ll receive a license key by email and activate it in the extension as soon as it launches.',
+    a: 'Yes — RankMap Pro is live on the Chrome Web Store. Install the free tier in one click, or purchase Lifetime ($9 launch price, 50% off the regular $19) and activate your license key in Settings → Account.',
   },
   {
     q: 'Does RankMap Pro work on Google Maps?',
@@ -303,7 +304,7 @@ export const FAQ = [
   },
   {
     q: 'What is the Lifetime plan?',
-    a: 'Lifetime is a one-time $19 launch payment (regular price $29) for unlimited scans, audits, deep profiles, quick scans, CSV exports, white-label PDFs, and all premium features — with no recurring subscription. Pay once, use forever.',
+    a: 'Lifetime is a one-time $9 launch payment (50% off the regular $19) for unlimited scans, audits, deep profiles, quick scans, CSV exports, white-label PDFs, and all premium features — with no recurring subscription. Pay once, use forever.',
   },
   {
     q: 'Is there a money-back guarantee?',
@@ -331,8 +332,18 @@ export const FAQ = [
 export const CREEM_CHECKOUT_URL =
   'https://www.creem.io/payment/prod_3Jo8Eof8Rme7XdxHktib8h';
 
-/** Chrome Web Store listing — set when published; null while extension is not live. */
-export const CHROME_STORE_URL: string | null = null;
+/** Published Chrome Web Store listing. */
+export const CHROME_STORE_URL =
+  'https://chromewebstore.google.com/detail/ndljgncgegebcbaphdocfhcffedcadmc';
 
-export const EXTENSION_COMING_SOON =
-  'Chrome extension coming soon to the Web Store. Purchase Lifetime now — your license key is delivered instantly by email.';
+/** Lifetime pricing shown on site and in marketing copy. */
+export const LIFETIME_PRICING = {
+  price: 9,
+  priceLabel: '$9',
+  compareAtPrice: 19,
+  compareAtLabel: '$19',
+  discountLabel: '50% off',
+} as const;
+
+export const EXTENSION_INSTALL_NOTE =
+  'Install free from the Chrome Web Store, or get Lifetime for $9 (50% off) — license key delivered instantly by email.';

@@ -1,4 +1,10 @@
-import { CREEM_CHECKOUT_URL, EXTENSION_COMING_SOON, SITE } from '@/content/site';
+import {
+  CHROME_STORE_URL,
+  CREEM_CHECKOUT_URL,
+  EXTENSION_INSTALL_NOTE,
+  LIFETIME_PRICING,
+  SITE,
+} from '@/content/site';
 import styles from './Hero.module.css';
 
 export default function Hero() {
@@ -7,7 +13,7 @@ export default function Hero() {
       <div className={`container ${styles.inner}`}>
         <div className={`${styles.badge} animate-in`}>
           <span className={styles.badgeDot} />
-          Chrome extension · Coming soon · Google Maps
+          Live on Chrome Web Store · Google Maps
         </div>
 
         <h1 className={`${styles.title} animate-in animate-in-delay-1`}>
@@ -21,23 +27,29 @@ export default function Hero() {
 
         <div className={`${styles.ctas} animate-in animate-in-delay-3`}>
           <a
-            href={CREEM_CHECKOUT_URL}
+            href={CHROME_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"
           >
-            Get Lifetime — $19
+            Install free on Chrome
           </a>
-          <span className="btn btn-secondary btn-disabled" aria-disabled="true">
-            Chrome extension — Coming soon
-          </span>
+          <a
+            href={CREEM_CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-secondary"
+          >
+            Get Lifetime — {LIFETIME_PRICING.priceLabel}{' '}
+            <span className={styles.discount}>({LIFETIME_PRICING.discountLabel})</span>
+          </a>
           <a href="#features" className="btn btn-secondary">
             See all features
           </a>
         </div>
 
         <p className={`${styles.comingSoon} animate-in animate-in-delay-3`}>
-          {EXTENSION_COMING_SOON}
+          {EXTENSION_INSTALL_NOTE}
         </p>
 
         <ul className={`${styles.stats} animate-in animate-in-delay-4`}>

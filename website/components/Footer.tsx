@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { SITE } from '@/content/site';
+import { CHROME_STORE_URL, SITE } from '@/content/site';
 import styles from './Footer.module.css';
 
 export default function Footer() {
@@ -20,7 +20,9 @@ export default function Footer() {
             <a href="#how-it-works">How it works</a>
             <a href="#who-its-for">Who it&apos;s for</a>
             <a href="#pricing">Pricing</a>
-            <a href="#install">Launch status</a>
+            <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer">
+              Install extension
+            </a>
           </div>
           <div>
             <span className={styles.groupLabel}>Legal</span>

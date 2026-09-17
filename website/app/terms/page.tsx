@@ -67,8 +67,8 @@ export default function TermsPage() {
             The Free plan has no payment required and includes monthly usage limits.
           </li>
           <li>
-            Lifetime is a one-time $19 launch payment (regular price $29) processed through Creem.io — no
-            recurring subscription.
+            Lifetime is a one-time $9 launch payment (50% off the regular $19) processed through
+            Creem.io — no recurring subscription.
           </li>
           <li>
             After purchase, you receive a license key via email. Activate it in Settings → Account inside the extension to unlock unlimited access.

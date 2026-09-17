@@ -45,6 +45,8 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## After launch
 
-- Add Chrome Web Store URL to `content/site.ts` (`CHROME_STORE_URL`).
-- Use `https://rankmappro.com/privacy` in Chrome Web Store listing.
+- Chrome Web Store URL lives in `content/site.ts` (`CHROME_STORE_URL`).
+- Lifetime pricing constants: `LIFETIME_PRICING` in `content/site.ts` and `UpgradePlans.tsx` in the extension.
+- Update the Creem product price when launch pricing changes.
+- Use `https://www.rankmappro.com/privacy` in Chrome Web Store listing.
 - Add `rankmappro.com` as authorized domain in Google Cloud OAuth.

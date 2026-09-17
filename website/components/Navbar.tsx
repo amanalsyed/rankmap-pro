@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { CREEM_CHECKOUT_URL, SITE } from '@/content/site';
+import { CHROME_STORE_URL, CREEM_CHECKOUT_URL, LIFETIME_PRICING, SITE } from '@/content/site';
 import styles from './Navbar.module.css';
 
 const LINKS = [
@@ -36,12 +36,20 @@ export default function Navbar() {
 
         <div className={styles.actions}>
           <a
+            href={CHROME_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`btn btn-secondary ${styles.install}`}
+          >
+            Install
+          </a>
+          <a
             href={CREEM_CHECKOUT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={`btn btn-primary ${styles.cta}`}
           >
-            Get Lifetime
+            Lifetime {LIFETIME_PRICING.priceLabel}
           </a>
           <button
             type="button"
@@ -67,6 +75,24 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
+          <a
+            href={CHROME_STORE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={styles.mobileLink}
+            onClick={() => setOpen(false)}
+          >
+            Install extension
+          </a>
+          <a
+            href={CREEM_CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`${styles.mobileLink} ${styles.mobileCta}`}
+            onClick={() => setOpen(false)}
+          >
+            Lifetime {LIFETIME_PRICING.priceLabel}
+          </a>
         </nav>
       ) : null}
     </header>

@@ -55,11 +55,16 @@
 
 .actions {
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
+.install,
 .cta {
   padding: 10px 18px;
   font-size: 14px;
+  white-space: nowrap;
 }
 
 @media (max-width: 768px) {
@@ -166,6 +171,14 @@
 
   .mobileLink:last-child {
     border-bottom: none;
+  }
+
+  .mobileCta {
+    color: var(--brand);
+  }
+
+  .install {
+    display: none;
   }
 }
 
