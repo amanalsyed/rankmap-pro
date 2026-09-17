@@ -1,4 +1,5 @@
 import ContactForm from '@/components/ContactForm';
+import DemoVideo from '@/components/DemoVideo';
 import FAQSection from '@/components/FAQ';
 import Features from '@/components/Features';
 import Hero from '@/components/Hero';
@@ -11,6 +12,7 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+      <DemoVideo />
       <Features />
       <HowItWorks />
       <WhoIsItFor />
