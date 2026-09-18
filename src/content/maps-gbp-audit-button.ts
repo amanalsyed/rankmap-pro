@@ -1,5 +1,4 @@
 import {
-  buildMapsUrlFromCid,
   decimalCidFromHexFid,
   extractChijFromUrl,
   extractDecimalCidFromUrl,
@@ -38,7 +37,12 @@ import { extractBusinessAge, extractLeadFromCard, extractPanelAddress, getAbsolu
 import { resolveListingCoordinates } from './listing-coordinates';
 import { parsePlaceUrlLatLng } from './maps-id-utils';
 import { findDetailCategoryInsertPoint, getBusinessPanel } from './maps-detail-panel';
+import {
+  buildAuditRequestFromListingCard,
+  buildAuditRequestFromListingCardAsync,
+} from '../gbp-audit/build-audit-request';
 import { normalizeMapsAuditUrl } from '../gbp-audit/maps-url';
+import type { StandaloneGbpAuditRequest } from '../gbp-audit/types';
 import { formatAuditAge, isAuditStale } from '../utils/audit-freshness';
 import {
   ensureGmbCategoryStyles,
@@ -48,13 +52,18 @@ import {
 } from './maps-gmb-categories-ui';
 import {
   collectSearchListingCards,
+  findMapsPlaceLinks,
   findSearchCategoryMount,
+  getSearchResultCard,
   isGoogleSearchPage,
   isGoogleHost,
   onListingToolsActivation,
   readCardKgMid,
   readSearchCardCategory,
 } from './search-dom-utils';
+
+const SEARCH_LISTING_CARD_SELECTORS =
+  'div.Nv2PK, div.bfdHYe, .VkpGBb, .rllt__details, .rllt__link, [data-local-attribute], div[jsname="MZArnb"], div[jsname="Cpkphb"], .uMdPh, div[data-cid], [data-rc_ludocids]';
 
 const STYLE_ID = 'nwf-gbp-audit-button-style';
 const TOAST_ID = 'nwf-gbp-audit-toast';
@@ -63,6 +72,8 @@ const GUARD_FLAG = '__nwfGbpAuditGuardInstalled';
 const BUTTON_ATTR = 'data-nwf-gbp-audit-for';
 const AUDIT_SCOPE_ATTR = 'data-nwf-audit-scope';
 const AUDIT_PLACE_ATTR = 'data-nwf-audit-place';
+const AUDIT_MAPS_URL_ATTR = 'data-nwf-audit-maps-url';
+const AUDIT_RESOLVED_PLACE_ATTR = 'data-nwf-audit-resolved-place';
 const auditingPlaceIds = new Set<string>();
 const categoryFetchInFlight = new Set<string>();
 
@@ -691,27 +702,58 @@ function gbpButtonsForPlace(placeId: string): HTMLButtonElement[] {
   ];
 }
 
-function buildAuditRequest(card: HTMLElement, placeId: string) {
-  const lead = extractLeadFromCard(card, placeId, null);
-  const href = getPlaceLink(card)?.getAttribute('href') ?? '';
-  const rawMapsUrl = getAbsoluteMapsUrl(href);
-  const { decimalCid } = cardListingKeys(card);
-  const mapsUrl = normalizeMapsAuditUrl(rawMapsUrl || buildMapsUrlFromCid(decimalCid), placeId);
-
-  return {
-    placeId,
-    name: lead?.name ?? 'Unknown Business',
-    mapsUrl,
-    category: lead?.category,
-    address: lead?.address,
-    phone: lead?.phone,
-    rating: lead?.rating,
-    reviews: lead?.reviews,
-    kgMid: readCardKgMid(card) ?? undefined,
-  };
+function scoreListingCardCandidate(el: HTMLElement, placeId: string): number {
+  let score = 0;
+  if (extractHexFidFromCard(el)) score += 4;
+  if (getPlaceLink(el)) score += 3;
+  if (el.getAttribute('data-cid') || el.getAttribute('data-rc_ludocids')) score += 2;
+  if (readCardKgMid(el)) score += 1;
+  if (resolveListingPlaceId(el) === placeId) score += 2;
+  return score;
 }
 
-function buildAuditRequestFromPanel(panel: HTMLElement, placeId: string) {
+/** Full listing card for audit — on Search the button mount is often narrower than the card. */
+function resolveListingCardFromWrap(wrap: HTMLElement, placeId: string): HTMLElement {
+  if (isGoogleSearchPage()) {
+    let best: HTMLElement | null = null;
+    let bestScore = 0;
+
+    for (let el: HTMLElement | null = wrap; el; el = el.parentElement) {
+      if (el.tagName === 'A') continue;
+      const score = scoreListingCardCandidate(el, placeId);
+      if (score > bestScore) {
+        bestScore = score;
+        best = el;
+      }
+    }
+
+    if (best && bestScore > 0) return best;
+
+    const fromShell = wrap.closest(SEARCH_LISTING_CARD_SELECTORS);
+    if (fromShell instanceof HTMLElement && fromShell.tagName !== 'A') {
+      return fromShell;
+    }
+
+    for (let el: HTMLElement | null = wrap; el; el = el.parentElement) {
+      for (const link of findMapsPlaceLinks(el)) {
+        const card = getSearchResultCard(link);
+        if (card) return card;
+      }
+    }
+
+    const fromLink = getResultCard(wrap);
+    if (fromLink) return fromLink;
+  }
+
+  const mount = wrap.parentElement;
+  if (mount instanceof HTMLElement && mount.tagName !== 'A') {
+    return mount;
+  }
+
+  return wrap.parentElement ?? wrap;
+}
+
+function buildAuditRequestFromPanel(panel: HTMLElement, placeId: string): StandaloneGbpAuditRequest {
   const name =
     panel.querySelector('h1.DUwDvf, h1.fontHeadlineLarge')?.textContent?.trim() ?? 'Unknown Business';
   const lead = extractLeadFromCard(panel, placeId, null);
@@ -728,20 +770,46 @@ function buildAuditRequestFromPanel(panel: HTMLElement, placeId: string) {
   };
 }
 
-function buildAuditRequestFromWrap(wrap: HTMLElement, placeId: string) {
+function readCachedAuditOverrides(wrap: HTMLElement, placeId: string) {
+  return {
+    placeId: wrap.getAttribute(AUDIT_RESOLVED_PLACE_ATTR) || placeId,
+    mapsUrl: wrap.getAttribute(AUDIT_MAPS_URL_ATTR) || undefined,
+  };
+}
+
+function buildAuditRequestFromWrap(
+  wrap: HTMLElement,
+  placeId: string
+): StandaloneGbpAuditRequest | null {
   if (wrap.getAttribute(AUDIT_SCOPE_ATTR) === 'detail') {
     const panel = getBusinessPanel();
     if (panel) return buildAuditRequestFromPanel(panel, placeId);
   }
 
-  const card = wrap.parentElement;
-  if (card instanceof HTMLElement) return buildAuditRequest(card, placeId);
+  const card = resolveListingCardFromWrap(wrap, placeId);
+  const cached = readCachedAuditOverrides(wrap, placeId);
+  return buildAuditRequestFromListingCard(card, {
+    placeId: cached.placeId,
+    mapsUrl: cached.mapsUrl,
+    kgMid: readCardKgMid(card) ?? undefined,
+  });
+}
 
-  return {
-    placeId,
-    name: 'Unknown Business',
-    mapsUrl: normalizeMapsAuditUrl(window.location.href, placeId),
-  };
+async function buildAuditRequestFromWrapAsync(
+  wrap: HTMLElement,
+  placeId: string
+): Promise<StandaloneGbpAuditRequest | null> {
+  const sync = buildAuditRequestFromWrap(wrap, placeId);
+  if (sync?.mapsUrl) return sync;
+  if (!isGoogleSearchPage()) return sync;
+
+  const card = resolveListingCardFromWrap(wrap, placeId);
+  const cached = readCachedAuditOverrides(wrap, placeId);
+  return buildAuditRequestFromListingCardAsync(card, {
+    placeId: cached.placeId,
+    mapsUrl: cached.mapsUrl,
+    kgMid: readCardKgMid(card) ?? undefined,
+  });
 }
 
 function detailPlaceId(): string | null {
@@ -775,25 +843,50 @@ function handleAuditButtonClick(btn: HTMLButtonElement, event: MouseEvent): void
     setButtonState(gbpBtn, 'running');
   }
 
-  const request = wrap
-    ? buildAuditRequestFromWrap(wrap, placeId)
-    : {
-        placeId,
-        name: 'Unknown Business',
-        mapsUrl: normalizeMapsAuditUrl('', placeId),
-      };
+  void (async () => {
+    const request: StandaloneGbpAuditRequest | null = wrap
+      ? await buildAuditRequestFromWrapAsync(wrap, placeId)
+      : (() => {
+          const mapsUrl = normalizeMapsAuditUrl('', placeId);
+          if (!mapsUrl) return null;
+          return {
+            placeId,
+            name: 'Unknown Business',
+            mapsUrl,
+            address: '',
+            phone: '',
+          };
+        })();
 
-  showToast(
-    'GBP Audit queued',
-    event.shiftKey
-      ? ` ${request.name} will open its report when ready.`
-      : ` Auditing ${request.name} in the background.`
-  );
+    if (!request?.mapsUrl) {
+      auditingPlaceIds.delete(placeId);
+      for (const gbpBtn of gbpButtonsForPlace(placeId)) {
+        setButtonState(gbpBtn, 'default');
+      }
+      showToast(
+        'GBP Audit failed',
+        ' Could not resolve a Google Maps link for this listing. Try opening it in Maps first.'
+      );
+      return;
+    }
 
-  void safeRuntimeSendMessage<{ ok?: boolean; error?: string }>(
-    { type: 'STANDALONE_GBP_AUDIT', request, openWhenDone: event.shiftKey },
-    notifyExtensionReloadNeeded
-  ).then((res) => {
+    if (wrap) {
+      wrap.setAttribute(AUDIT_MAPS_URL_ATTR, request.mapsUrl);
+      wrap.setAttribute(AUDIT_RESOLVED_PLACE_ATTR, request.placeId);
+    }
+
+    showToast(
+      'GBP Audit queued',
+      event.shiftKey
+        ? ` ${request.name} will open its report when ready.`
+        : ` Auditing ${request.name} in the background.`
+    );
+
+    const res = await safeRuntimeSendMessage<{ ok?: boolean; error?: string }>(
+      { type: 'STANDALONE_GBP_AUDIT', request, openWhenDone: event.shiftKey },
+      notifyExtensionReloadNeeded
+    );
+
     if (res?.ok === false) {
       auditingPlaceIds.delete(placeId);
       for (const gbpBtn of gbpButtonsForPlace(placeId)) {
@@ -804,7 +897,7 @@ function handleAuditButtonClick(btn: HTMLButtonElement, event: MouseEvent): void
         res?.error ? ` ${res.error}` : ' Could not start the audit. Please try again.'
       );
     }
-  });
+  })();
 }
 
 /**
@@ -1016,7 +1109,16 @@ function attachButton(card: HTMLElement, placeId: string): void {
   if (mount.tagName === 'A') return;
   if (mount.querySelector(`.nwf-gbp-audit-wrap[${AUDIT_SCOPE_ATTR}="list"]`)) return;
 
-  mount.appendChild(createAuditButtonWrap(placeId, 'list'));
+  const wrap = createAuditButtonWrap(placeId, 'list');
+  const cached = buildAuditRequestFromListingCard(card, {
+    placeId,
+    kgMid: readCardKgMid(card) ?? undefined,
+  });
+  if (cached?.mapsUrl) {
+    wrap.setAttribute(AUDIT_MAPS_URL_ATTR, cached.mapsUrl);
+    wrap.setAttribute(AUDIT_RESOLVED_PLACE_ATTR, cached.placeId);
+  }
+  mount.appendChild(wrap);
 }
 
 function attachDetailPanelButtons(): void {

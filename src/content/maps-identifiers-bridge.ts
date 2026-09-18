@@ -10,6 +10,16 @@ export interface IdentifierRecord {
   lng: number | null;
 }
 
+interface MainWorldIdentifierRecord extends IdentifierRecord {
+  knowledgeGraphId?: string | null;
+}
+
+function normalizeKgMid(value: string): string {
+  const trimmed = value.trim();
+  if (!trimmed) return '';
+  return trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+}
+
 export interface IdentifierLookupMaps {
   byHexFid: Map<string, IdentifierRecord>;
   byPlaceId: Map<string, IdentifierRecord>;
@@ -89,27 +99,70 @@ let cachedMaps: IdentifierLookupMaps | null = null;
 let cacheUpdatedAt = 0;
 let bulkFetchPromise: Promise<IdentifierLookupMaps> | null = null;
 
-async function requestIdentifiersBulk(timeoutMs: number): Promise<IdentifierLookupMaps> {
+async function requestRawIdentifiersBulk(timeoutMs: number): Promise<MainWorldIdentifierRecord[]> {
   const started = Date.now();
-  let records: IdentifierRecord[] | null = null;
 
   while (Date.now() - started < timeoutMs) {
     const remaining = timeoutMs - (Date.now() - started);
     if (remaining <= 0) break;
 
-    records = await postMessageRequest<IdentifierRecord[]>(
+    const records = await postMessageRequest<MainWorldIdentifierRecord[]>(
       'NWF_GET_IDENTIFIERS_BULK',
       'NWF_IDENTIFIERS_BULK',
       {},
       Math.min(4500, remaining),
-      (data) => (Array.isArray(data.records) ? (data.records as IdentifierRecord[]) : null)
+      (data) => {
+        if (!Array.isArray(data.records)) return null;
+        return (data.records as MainWorldIdentifierRecord[])
+          .map((record) => ({
+            hexFid: String(record.hexFid ?? '').toLowerCase(),
+            placeId: record.placeId ?? null,
+            cid: record.cid ?? null,
+            lat: record.lat ?? null,
+            lng: record.lng ?? null,
+            knowledgeGraphId: record.knowledgeGraphId ?? null,
+          }))
+          .filter((record) => record.hexFid);
+      }
     );
 
-    if (records && records.length > 0) break;
+    if (records && records.length > 0) return records;
     await new Promise((resolve) => setTimeout(resolve, 400));
   }
 
-  return recordsToMaps(records ?? []);
+  return [];
+}
+
+async function requestIdentifiersBulk(timeoutMs: number): Promise<IdentifierLookupMaps> {
+  const records = await requestRawIdentifiersBulk(timeoutMs);
+  return recordsToMaps(records);
+}
+
+/** Match a Google Search local-pack card (`/g/…` kgmid) to Maps hex/cid from page state. */
+export async function fetchIdentifierByKgMid(
+  kgMid: string,
+  timeoutMs = 8000
+): Promise<IdentifierRecord | null> {
+  const wanted = normalizeKgMid(kgMid);
+  if (!wanted) return null;
+
+  const records = await requestRawIdentifiersBulk(timeoutMs);
+  const match = records.find((record) => {
+    const kg = record.knowledgeGraphId?.trim();
+    if (!kg) return false;
+    const normalized = normalizeKgMid(kg);
+    return normalized === wanted || kg === kgMid || kg === wanted;
+  });
+
+  if (!match?.hexFid) return null;
+
+  return {
+    hexFid: match.hexFid,
+    placeId: match.placeId,
+    cid: match.cid,
+    lat: match.lat,
+    lng: match.lng,
+  };
 }
 
 export async function fetchAllIdentifiersFromMainWorld(

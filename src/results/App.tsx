@@ -7,6 +7,7 @@ import ResultsLeadList from '../components/ResultsLeadList';
 import AuditQueueBar from '../components/AuditQueueBar';
 import BrandMark from '../components/BrandMark';
 import { PRODUCT_NAME, PRODUCT_SUBTITLE } from '../brand';
+import { computeScanSummaryStats } from '../scan/scan-summary';
 
 export default function App() {
   const { plan } = usePlanCapabilities();
@@ -18,6 +19,11 @@ export default function App() {
   const isEnriching = progress.status === 'enriching';
 
   const leadList = useProcessedLeads(results);
+  const summary = computeScanSummaryStats(progress, results.length);
+  const showCompletionBanner =
+    !viewingArchived &&
+    Boolean(progress.message) &&
+    (progress.status === 'complete' || progress.status === 'enriching' || progress.status === 'error');
 
   const handleExport = async () => {
     const result = await downloadCsv(leadList.processed);
@@ -95,6 +101,27 @@ export default function App() {
 
       <AuditQueueBar />
 
+      {showCompletionBanner ? (
+        <div
+          className={
+            progress.status === 'complete'
+              ? 'scan-complete-banner'
+              : progress.status === 'error'
+                ? 'scan-error-banner'
+                : 'scan-enriching-banner'
+          }
+        >
+          <strong>
+            {progress.status === 'complete'
+              ? 'Scan finished'
+              : progress.status === 'error'
+                ? 'Scan issue'
+                : 'Listing scan finished'}
+          </strong>
+          <span>{progress.message}</span>
+        </div>
+      ) : null}
+
       <section className={`progress ${isPaused ? 'progress-paused' : ''}`}>
         <p className="progress-title">
           {batchScan?.active && progress.batchCityIndex && progress.batchCityTotal ? (
@@ -129,6 +156,22 @@ export default function App() {
             <span>In table</span>
             <strong>{results.length}</strong>
           </div>
+          {(progress.status === 'complete' ||
+            progress.status === 'enriching' ||
+            progress.status === 'error') && (
+            <>
+              <div className="stat">
+                <span>Skipped</span>
+                <strong>{summary.skipped}</strong>
+              </div>
+              {summary.notScanned > 0 ? (
+                <div className="stat">
+                  <span>Not scanned</span>
+                  <strong>{summary.notScanned}</strong>
+                </div>
+              ) : null}
+            </>
+          )}
           {batchScan?.active || progress.batchCityTotal ? (
             <div className="stat">
               <span>Batch</span>

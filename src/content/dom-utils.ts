@@ -260,13 +260,30 @@ function readListingCid(card: Element): string | null {
   return digits || raw;
 }
 
+function unwrapGoogleRedirectHref(href: string): string {
+  try {
+    const url = new URL(href, 'https://www.google.com');
+    if (url.hostname.includes('google.com') && url.pathname === '/url') {
+      return url.searchParams.get('q') ?? url.searchParams.get('url') ?? href;
+    }
+  } catch {
+    // keep raw href
+  }
+  return href;
+}
+
 /** Stable id for a listing card on Maps or Google Search local results. */
 export function resolveListingPlaceId(card: Element): string {
   const link = getPlaceLink(card);
   const href = link?.getAttribute('href') ?? link?.getAttribute('data-url') ?? '';
   const fromHref = extractPlaceId(href);
   if (fromHref) return fromHref;
-  if (href && isMapsPlaceHref(href)) return href.split('?')[0];
+
+  if (href && isMapsPlaceHref(href)) {
+    const unwrapped = unwrapGoogleRedirectHref(href);
+    const fromUnwrapped = extractPlaceId(unwrapped);
+    if (fromUnwrapped) return fromUnwrapped;
+  }
 
   // Search listings often expose the feature id only via the Directions link.
   const hexFid = extractHexFidFromCard(card);
@@ -307,16 +324,17 @@ export function getResultItems(feed: Element): HTMLElement[] {
   const cards: HTMLElement[] = [];
 
   const addFromLink = (link: Element) => {
+    const card = getResultCard(link) ?? (link instanceof HTMLElement ? link : null);
+    if (!card || card.tagName === 'A') return;
+
     const href =
       link.getAttribute('href') ??
       link.getAttribute('data-url') ??
       (link instanceof HTMLAnchorElement ? link.href : '') ??
       '';
-    const key = extractPlaceId(href) ?? (isMapsPlaceHref(href) ? href.split('?')[0] : '');
+    const key = extractPlaceId(href) || resolveListingPlaceId(card);
     if (!key || seen.has(key)) return;
 
-    const card = getResultCard(link) ?? (link instanceof HTMLElement ? link : null);
-    if (!card || card.tagName === 'A') return;
     seen.add(key);
     cards.push(card);
   };

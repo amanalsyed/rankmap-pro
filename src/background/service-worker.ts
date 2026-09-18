@@ -69,6 +69,16 @@ import {
   handleAuditQueueItemComplete,
   installAuditNotificationClickHandler,
 } from '../gbp-audit/audit-notifications';
+import {
+  computeScanSummaryStats,
+  formatScanFullyCompleteMessage,
+  formatScanListingCompleteMessage,
+} from '../scan/scan-summary';
+import {
+  installScanNotificationClickHandler,
+  notifyScanFullyComplete,
+  notifyScanListingComplete,
+} from '../scan/scan-notifications';
 import { prepareAuditTabAndScrape } from '../gbp-audit/audit-tab';
 import { harvestSearchProfileFields } from '../gbp-audit/search-profile-harvest';
 import type { StandaloneGbpAuditRequest } from '../gbp-audit/types';
@@ -364,6 +374,7 @@ let auditQueue: Array<{ leadId: string; openWhenDone: boolean }> = [];
 let auditing = false;
 
 installAuditNotificationClickHandler();
+installScanNotificationClickHandler(() => openResultsPage());
 
 async function openAuditPage(leadId: string): Promise<void> {
   await openScanAuditPage(leadId);
@@ -733,6 +744,79 @@ async function startNextBatchCity(index: number): Promise<void> {
   await launchMapsScan(params);
 }
 
+async function finalizeScanFullyComplete(
+  options: { stopped?: boolean; batchFinished?: boolean } = {}
+): Promise<void> {
+  const state = await readState();
+  const batchActive = state.batchScan?.active === true;
+
+  if (batchActive && !options.stopped && !options.batchFinished) {
+    void maybeAdvanceBatchScan();
+    return;
+  }
+
+  const stats = computeScanSummaryStats(state.progress, state.results.length);
+  const message = formatScanFullyCompleteMessage(stats, {
+    stopped: options.stopped,
+    batchFinished: options.batchFinished,
+    batchCities: state.batchScan?.cities.length ?? state.progress.batchCityTotal,
+    totalLeads: state.results.length,
+  });
+
+  await mutateState((s) => {
+    s.progress.status = 'complete';
+    s.progress.message = message;
+    s.progress.enriching = 0;
+    if (options.batchFinished && s.batchScan) {
+      s.batchScan.active = false;
+    }
+  });
+  await flushSessionSync();
+  await notifyScanFullyComplete(message);
+  logActivity('scan_completed', {
+    checked: stats.checked,
+    target: stats.target,
+    leads: stats.leads,
+    skipped: stats.skipped,
+    notScanned: stats.notScanned,
+    stopped: options.stopped ?? false,
+  });
+}
+
+async function handleListingScanFinished(stopped = false): Promise<void> {
+  const state = await readState();
+  const enrichingCount = enrichActiveCount + enrichQueue.length;
+  const settings = await readEnrichmentSettings();
+  const willEnrich = settings.enrichDuringScan && enrichingCount > 0;
+  const stats = computeScanSummaryStats(state.progress, state.results.length);
+
+  if (willEnrich) {
+    const message = formatScanListingCompleteMessage(stats, enrichingCount, {
+      stopped,
+      batchCity: state.progress.batchCity,
+    });
+    await mutateState((s) => {
+      s.progress.message = message;
+      s.progress.status = 'enriching';
+      s.progress.enriching = enrichingCount;
+    });
+    await flushSessionSync();
+    await notifyScanListingComplete(message);
+    return;
+  }
+
+  await finalizeScanFullyComplete({ stopped });
+}
+
+async function handleEnrichmentFinished(): Promise<void> {
+  const state = await readState();
+  if (state.batchScan?.active) {
+    void maybeAdvanceBatchScan();
+    return;
+  }
+  await finalizeScanFullyComplete();
+}
+
 async function maybeAdvanceBatchScan(): Promise<void> {
   const state = await readState();
   if (!state.batchScan?.active) return;
@@ -741,11 +825,7 @@ async function maybeAdvanceBatchScan(): Promise<void> {
 
   const nextIndex = state.batchScan.currentCityIndex + 1;
   if (nextIndex >= state.batchScan.cities.length) {
-    await mutateState((s) => {
-      if (s.batchScan) s.batchScan.active = false;
-      s.progress.message = `Batch complete — ${s.batchScan?.cities.length ?? 0} cities scanned.`;
-    });
-    await flushSessionSync();
+    await finalizeScanFullyComplete({ batchFinished: true });
     return;
   }
 
@@ -819,6 +899,12 @@ async function runEnrichmentQueue(): Promise<void> {
 
   if (enrichQueue.length > 0 && !stopEnrichment) {
     void runEnrichmentQueue();
+    return;
+  }
+
+  const state = await readState();
+  if (state.progress.status === 'complete' || state.progress.status === 'enriching') {
+    await handleEnrichmentFinished();
   } else {
     void maybeAdvanceBatchScan();
   }
@@ -1279,6 +1365,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           }
         });
         await flushSessionSync();
+        await finalizeScanFullyComplete({ stopped: true });
         sendResponse({ ok: true });
         break;
 
@@ -1797,18 +1884,17 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           mergeLeads(state, tagged);
           state.progress = {
             ...progress,
-            status: enrichQueue.length > 0 || enriching ? 'enriching' : 'complete',
+            status: 'complete',
             withoutWebsite: state.results.length,
             enriching: enrichActiveCount + enrichQueue.length,
           };
           applyBatchProgressMeta(state);
         });
         await flushSessionSync();
-        for (const lead of extra) void queueEnrichment(lead);
-        const settings = await readEnrichmentSettings();
-        if (!settings.enrichDuringScan && enrichQueue.length === 0 && !enriching) {
-          void maybeAdvanceBatchScan();
+        for (const lead of extra) {
+          await queueEnrichment(lead);
         }
+        await handleListingScanFinished(false);
         sendResponse({ ok: true });
         break;
       }
