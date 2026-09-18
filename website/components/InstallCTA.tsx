@@ -2,7 +2,6 @@ import {
   CHROME_STORE_URL,
   CREEM_CHECKOUT_URL,
   LIFETIME_PRICING,
-  SITE,
 } from '@/content/site';
 import Reveal from './Reveal';
 import styles from './InstallCTA.module.css';
@@ -36,9 +35,6 @@ export default function InstallCTA() {
                 className="btn btn-secondary"
               >
                 Get Lifetime — {LIFETIME_PRICING.priceLabel}
-              </a>
-              <a href={`mailto:${SITE.email}`} className="btn btn-secondary">
-                Contact us
               </a>
             </div>
             <ol className={styles.steps}>

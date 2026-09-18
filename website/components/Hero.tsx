@@ -43,9 +43,6 @@ export default function Hero() {
             Get Lifetime — {LIFETIME_PRICING.priceLabel}{' '}
             <span className={styles.discount}>({LIFETIME_PRICING.discountLabel})</span>
           </a>
-          <a href="#features" className="btn btn-secondary">
-            See all features
-          </a>
         </div>
 
         <p className={`${styles.comingSoon} animate-in animate-in-delay-3`}>
