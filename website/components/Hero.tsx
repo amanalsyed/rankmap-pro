@@ -1,3 +1,4 @@
+import TrackedOutboundLink from '@/components/analytics/TrackedOutboundLink';
 import {
   CHROME_STORE_URL,
   CREEM_CHECKOUT_URL,
@@ -26,23 +27,27 @@ export default function Hero() {
         </p>
 
         <div className={`${styles.ctas} animate-in animate-in-delay-3`}>
-          <a
+          <TrackedOutboundLink
             href={CHROME_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-primary"
+            ctaKind="install"
+            location="hero"
           >
             Install free on Chrome
-          </a>
-          <a
+          </TrackedOutboundLink>
+          <TrackedOutboundLink
             href={CREEM_CHECKOUT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="btn btn-secondary"
+            ctaKind="checkout"
+            location="hero"
           >
             Get Lifetime — {LIFETIME_PRICING.priceLabel}{' '}
             <span className={styles.discount}>({LIFETIME_PRICING.discountLabel})</span>
-          </a>
+          </TrackedOutboundLink>
         </div>
 
         <p className={`${styles.comingSoon} animate-in animate-in-delay-3`}>

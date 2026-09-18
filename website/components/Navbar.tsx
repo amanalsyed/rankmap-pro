@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import TrackedOutboundLink from '@/components/analytics/TrackedOutboundLink';
 import { CHROME_STORE_URL, CREEM_CHECKOUT_URL, LIFETIME_PRICING, SITE } from '@/content/site';
 import styles from './Navbar.module.css';
 
@@ -35,22 +36,26 @@ export default function Navbar() {
         </nav>
 
         <div className={styles.actions}>
-          <a
+          <TrackedOutboundLink
             href={CHROME_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={`btn btn-secondary ${styles.install}`}
+            ctaKind="install"
+            location="navbar"
           >
             Install
-          </a>
-          <a
+          </TrackedOutboundLink>
+          <TrackedOutboundLink
             href={CREEM_CHECKOUT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={`btn btn-primary ${styles.cta}`}
+            ctaKind="checkout"
+            location="navbar"
           >
             Lifetime {LIFETIME_PRICING.priceLabel}
-          </a>
+          </TrackedOutboundLink>
           <button
             type="button"
             className={styles.menuBtn}
@@ -75,24 +80,28 @@ export default function Navbar() {
               {link.label}
             </a>
           ))}
-          <a
+          <TrackedOutboundLink
             href={CHROME_STORE_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={styles.mobileLink}
+            ctaKind="install"
+            location="navbar_mobile"
             onClick={() => setOpen(false)}
           >
             Install extension
-          </a>
-          <a
+          </TrackedOutboundLink>
+          <TrackedOutboundLink
             href={CREEM_CHECKOUT_URL}
             target="_blank"
             rel="noopener noreferrer"
             className={`${styles.mobileLink} ${styles.mobileCta}`}
+            ctaKind="checkout"
+            location="navbar_mobile"
             onClick={() => setOpen(false)}
           >
             Lifetime {LIFETIME_PRICING.priceLabel}
-          </a>
+          </TrackedOutboundLink>
         </nav>
       ) : null}
     </header>

@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import SiteGoogleAnalytics from '@/components/analytics/SiteGoogleAnalytics';
 import ConditionalSiteChrome from '@/components/ConditionalSiteChrome';
 import { SEO, SITE } from '@/content/site';
 import './globals.css';
@@ -55,6 +56,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body>
         <ConditionalSiteChrome>{children}</ConditionalSiteChrome>
+        <SiteGoogleAnalytics />
       </body>
     </html>
   );

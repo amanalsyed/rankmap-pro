@@ -1,3 +1,4 @@
+import TrackedOutboundLink from '@/components/analytics/TrackedOutboundLink';
 import {
   CHROME_STORE_URL,
   CREEM_CHECKOUT_URL,
@@ -20,22 +21,26 @@ export default function InstallCTA() {
               <s>{LIFETIME_PRICING.compareAtLabel}</s> — one-time payment, all features unlimited.
             </p>
             <div className={styles.actions}>
-              <a
+              <TrackedOutboundLink
                 href={CHROME_STORE_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-primary"
+                ctaKind="install"
+                location="install_cta"
               >
                 Install on Chrome
-              </a>
-              <a
+              </TrackedOutboundLink>
+              <TrackedOutboundLink
                 href={CREEM_CHECKOUT_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn btn-secondary"
+                ctaKind="checkout"
+                location="install_cta"
               >
                 Get Lifetime — {LIFETIME_PRICING.priceLabel}
-              </a>
+              </TrackedOutboundLink>
             </div>
             <ol className={styles.steps}>
               <li>Install the extension from the Chrome Web Store (free tier included)</li>

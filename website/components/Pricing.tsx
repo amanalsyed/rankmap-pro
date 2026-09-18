@@ -1,3 +1,4 @@
+import TrackedOutboundLink from '@/components/analytics/TrackedOutboundLink';
 import { CHROME_STORE_URL, CREEM_CHECKOUT_URL, LIFETIME_PRICING, PLANS, SITE } from '@/content/site';
 
 import Reveal from './Reveal';
@@ -182,23 +183,27 @@ export default function Pricing() {
                   </ul>
 
                   {plan.id === 'lifetime' ? (
-                    <a
+                    <TrackedOutboundLink
                       href={CREEM_CHECKOUT_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-primary"
+                      ctaKind="checkout"
+                      location="pricing_lifetime"
                     >
                       {plan.cta} — {LIFETIME_PRICING.priceLabel}
-                    </a>
+                    </TrackedOutboundLink>
                   ) : CHROME_STORE_URL ? (
-                    <a
+                    <TrackedOutboundLink
                       href={CHROME_STORE_URL}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="btn btn-secondary"
+                      ctaKind="install"
+                      location="pricing_free"
                     >
                       {plan.cta}
-                    </a>
+                    </TrackedOutboundLink>
                   ) : (
                     <span className="btn btn-secondary btn-disabled" aria-disabled="true">
                       {plan.cta}

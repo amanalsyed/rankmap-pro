@@ -1,5 +1,6 @@
 'use client';
 
+import { trackContactSubmit } from '@/lib/analytics';
 import { FormEvent, useState } from 'react';
 import SectionHeader from './SectionHeader';
 import styles from './ContactForm.module.css';
@@ -55,6 +56,7 @@ export default function ContactForm() {
 
       setStatus('success');
       setFields(EMPTY_FORM);
+      trackContactSubmit();
     } catch {
       setStatus('error');
       setErrorMessage('Could not send your message. Check your connection and try again.');

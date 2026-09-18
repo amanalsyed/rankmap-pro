@@ -1,3 +1,4 @@
+import TrackedOutboundLink from '@/components/analytics/TrackedOutboundLink';
 import Link from 'next/link';
 import { CHROME_STORE_URL, SITE } from '@/content/site';
 import styles from './Footer.module.css';
@@ -20,9 +21,15 @@ export default function Footer() {
             <a href="#how-it-works">How it works</a>
             <a href="#who-its-for">Who it&apos;s for</a>
             <a href="#pricing">Pricing</a>
-            <a href={CHROME_STORE_URL} target="_blank" rel="noopener noreferrer">
+            <TrackedOutboundLink
+              href={CHROME_STORE_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              ctaKind="install"
+              location="footer"
+            >
               Install extension
-            </a>
+            </TrackedOutboundLink>
           </div>
           <div>
             <span className={styles.groupLabel}>Legal</span>
