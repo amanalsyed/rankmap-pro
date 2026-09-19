@@ -6,3 +6,5 @@ Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
+
+Sitemap: https://www.rankmappro.com/sitemap.xml
