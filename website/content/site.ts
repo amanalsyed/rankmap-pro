@@ -35,8 +35,8 @@ export const FEATURE_GROUPS = [
     summary:
       'Scan Google Maps by niche and city to find local businesses with no website on their GBP — your best prospects for web design and SEO outreach.',
     items: [
-      'Scan by niche + location — up to 50 results per scan (Free), 999 on Lifetime',
-      '1 lead scan / month on Free · unlimited on Lifetime',
+      'Scan by niche + location — up to 100 results per scan (Free), 999 on Lifetime',
+      '2 lead scans / month on Free · unlimited on Lifetime',
       'Live progress: checked count, no-website count, enrichment status',
       'Pause, resume, and stop scans from popup or Results page',
       'Multi-city batch on Lifetime only — up to 99 cities per run (single-city on Free)',
@@ -86,7 +86,7 @@ export const FEATURE_GROUPS = [
       'One-click Google Business Profile audits with a 0–100 optimization score, actionable findings, and client-ready PDF exports.',
     items: [
       'GMB Audit button on every Maps listing and search result card',
-      '2 GBP audits / month on Free · unlimited on Lifetime',
+      '3 GBP audits / month on Free · unlimited on Lifetime',
       'Standalone audits without running a lead scan first',
       'Scores website, categories, hours, photos, posts, reviews, attributes, and more',
       'Critical / needs improvement / good findings breakdown',
@@ -123,8 +123,8 @@ export const FEATURE_GROUPS = [
       'Competitive intelligence from Maps search results — quick card-level scans or deep full-profile scrapes with 10 report tabs.',
     items: [
       'Sticky scan bar at the top of Maps search results',
-      'Quick Scan — 2/month on Free · unlimited on Lifetime',
-      'Deep Scan — 1 profile/month on Free · unlimited on Lifetime',
+      'Quick Scan — 3/month on Free · unlimited on Lifetime',
+      'Deep Scan — 3 profiles/month on Free · unlimited on Lifetime',
       'Partial deep scan when quota is low — uses remaining profiles and skips the rest',
       'Report tabs: Overview, Categories, Reviews, Location map, Search 3-pack, Compare',
       'Deep-only tabs: Services, Hours, Attributes, Profile features matrix',
@@ -242,11 +242,11 @@ export const PLANS = [
     period: 'forever',
     description: 'Try core tools with monthly limits.',
     features: [
-      '1 lead scan / month',
-      '2 GBP audits / month',
-      '2 quick Local Scans / month',
-      '1 deep scan profile / month',
-      'Single-city scans (up to 50 results)',
+      '2 lead scans / month',
+      '3 GBP audits / month',
+      '3 quick Local Scans / month',
+      '3 deep scan profiles / month',
+      'Single-city scans (up to 100 results)',
       'Enrichment on 1 scan / month',
       '1 CSV export / month',
       '1 rank-check pin',
@@ -288,7 +288,7 @@ export const FAQ = [
   },
   {
     q: 'Is there a free plan?',
-    a: 'Yes. The free plan includes 1 lead scan, 2 GBP audits, 2 quick Local Scans, and 1 deep scan profile per month, plus single-city scans up to 50 results. Upgrade to Lifetime for unlimited access — purchase a license key and activate it in Settings → Account.',
+    a: 'Yes. The free plan includes 2 lead scans, 3 GBP audits, 3 quick Local Scans, and 3 deep scan profiles per month, plus single-city scans up to 100 results. Upgrade to Lifetime for unlimited access — purchase a license key and activate it in Settings → Account.',
   },
   {
     q: 'How do I upgrade to Lifetime?',

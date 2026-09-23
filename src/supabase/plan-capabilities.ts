@@ -28,7 +28,7 @@ export const PLAN_CAPABILITIES: Record<Plan, PlanCapabilities> = {
 
   free: {
 
-    maxResultsPerScan: 50,
+    maxResultsPerScan: 100,
 
     batchMaxCities: 1,
 

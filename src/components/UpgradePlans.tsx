@@ -14,11 +14,11 @@ const LIFETIME_DISCOUNT = '50% off';
 const MONEY_BACK_GUARANTEE = '14-day money-back guarantee — no questions asked.';
 
 const FREE_FEATURES = [
-  '1 lead scan / month',
-  '2 GBP audits / month',
-  '2 quick Local Scans / month',
-  '1 deep scan profile / month',
-  'Single-city scans (up to 50 results)',
+  '2 lead scans / month',
+  '3 GBP audits / month',
+  '3 quick Local Scans / month',
+  '3 deep scan profiles / month',
+  'Single-city scans (up to 100 results)',
   'Enrichment on 1 scan / month',
   '1 CSV export / month',
   '1 rank-check pin',

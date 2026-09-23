@@ -5,17 +5,17 @@
 
 -- Update monthly quotas
 UPDATE public.plan_limits SET
-  scans_per_month = 1,
-  quick_scans_per_month = 2,
-  deep_scans_per_month = 1,
-  audits_per_month = 2,
+  scans_per_month = 2,
+  quick_scans_per_month = 3,
+  deep_scans_per_month = 3,
+  audits_per_month = 3,
   enrichment_scans_per_month = 1,
   csv_exports_per_month = 1
 WHERE plan = 'free';
 
 -- Update per-scan capabilities
 UPDATE public.plan_capabilities SET
-  max_results_per_scan = 50,
+  max_results_per_scan = 100,
   batch_max_cities = 1,
   rank_check_max_pins = 1,
   enrichment_enabled = true,

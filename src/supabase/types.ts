@@ -49,10 +49,10 @@ export interface PlanLimits {
 
 export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
   free: {
-    scans_per_month: 1,
-    quick_scans_per_month: 2,
-    deep_scans_per_month: 1,
-    audits_per_month: 2,
+    scans_per_month: 2,
+    quick_scans_per_month: 3,
+    deep_scans_per_month: 3,
+    audits_per_month: 3,
     enrichment_scans_per_month: 1,
     csv_exports_per_month: 1,
   },
