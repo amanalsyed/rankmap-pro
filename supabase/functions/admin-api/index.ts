@@ -82,10 +82,12 @@ serve(async (req) => {
           { count: freeUsers },
           { count: activeLicenses },
           { count: feedbackCount },
+          { count: contactCount },
           { data: todayActivity },
           { data: recentProfiles },
           { data: recentActivity },
           { data: recentFeedback },
+          { data: recentContact },
           { data: recentRevoked },
         ] = await Promise.all([
           admin.from('profiles').select('*', { count: 'exact', head: true }),
@@ -95,10 +97,12 @@ serve(async (req) => {
           admin.from('profiles').select('*', { count: 'exact', head: true }).eq('plan', 'free'),
           admin.from('licenses').select('*', { count: 'exact', head: true }).eq('status', 'active'),
           admin.from('feedback').select('*', { count: 'exact', head: true }),
+          admin.from('contact_submissions').select('*', { count: 'exact', head: true }),
           admin.from('activity_events').select('user_id').gte('created_at', todayStart).limit(5000),
           admin.from('profiles').select('created_at').gte('created_at', thirtyDaysAgo),
           admin.from('activity_events').select('created_at').gte('created_at', thirtyDaysAgo),
           admin.from('feedback').select('id, category, created_at').gte('created_at', daysAgoIso(1)),
+          admin.from('contact_submissions').select('id, name, email, created_at').gte('created_at', daysAgoIso(1)),
           admin.from('licenses').select('id, created_at').eq('status', 'revoked').gte('updated_at', daysAgoIso(7)),
         ]);
 
@@ -129,6 +133,12 @@ serve(async (req) => {
         if (bugFeedback.length > 0) {
           alerts.push({ level: 'warning', message: `${bugFeedback.length} bug report(s) in the last 24 hours` });
         }
+        if ((recentContact ?? []).length > 0) {
+          alerts.push({
+            level: 'info',
+            message: `${recentContact!.length} website contact message(s) in the last 24 hours`,
+          });
+        }
         if ((suspendedUsers ?? 0) > 0) {
           alerts.push({ level: 'info', message: `${suspendedUsers} suspended account(s)` });
         }
@@ -148,6 +158,7 @@ serve(async (req) => {
           freeUsers: freeUsers ?? 0,
           activeLicenses: activeLicenses ?? 0,
           feedbackCount: feedbackCount ?? 0,
+          contactCount: contactCount ?? 0,
           activeToday,
           usageThisMonth: usage,
           signupsByDay,
@@ -543,6 +554,21 @@ serve(async (req) => {
         const { data, count, error } = await query;
         if (error) return json({ error: error.message }, 400);
         return json({ feedback: data ?? [], total: count ?? 0, page, limit });
+      }
+
+      case 'list_contact': {
+        const page = Math.max(1, Number(body.page) || 1);
+        const limit = Math.min(100, Math.max(1, Number(body.limit) || 25));
+        const offset = (page - 1) * limit;
+
+        const { data, count, error } = await admin
+          .from('contact_submissions')
+          .select('*', { count: 'exact' })
+          .order('created_at', { ascending: false })
+          .range(offset, offset + limit - 1);
+
+        if (error) return json({ error: error.message }, 400);
+        return json({ contacts: data ?? [], total: count ?? 0, page, limit });
       }
 
       case 'list_admin_log': {

@@ -9,7 +9,7 @@ import AdminCharts from './AdminCharts';
 import AdminLogin from './AdminLogin';
 import styles from './AdminDashboard.module.css';
 
-type Tab = 'overview' | 'users' | 'licenses' | 'feedback' | 'activity' | 'audit';
+type Tab = 'overview' | 'users' | 'licenses' | 'feedback' | 'contact' | 'activity' | 'audit';
 
 interface Stats {
   totalUsers: number;
@@ -19,6 +19,7 @@ interface Stats {
   freeUsers: number;
   activeLicenses: number;
   feedbackCount: number;
+  contactCount: number;
   activeToday: number;
   usageThisMonth: {
     scans: number;
@@ -81,6 +82,9 @@ export default function AdminDashboard() {
   const [feedbackTotal, setFeedbackTotal] = useState(0);
   const [feedbackPage, setFeedbackPage] = useState(1);
   const [feedbackCategory, setFeedbackCategory] = useState('');
+  const [contacts, setContacts] = useState<Record<string, unknown>[]>([]);
+  const [contactsTotal, setContactsTotal] = useState(0);
+  const [contactPage, setContactPage] = useState(1);
   const [activity, setActivity] = useState<Record<string, unknown>[]>([]);
   const [activityTotal, setActivityTotal] = useState(0);
   const [activityPage, setActivityPage] = useState(1);
@@ -139,6 +143,15 @@ export default function AdminDashboard() {
     setFeedbackTotal(data.total);
   }, [feedbackPage, feedbackCategory]);
 
+  const loadContacts = useCallback(async () => {
+    const data = await callAdminApi<{ contacts: Record<string, unknown>[]; total: number }>(
+      'list_contact',
+      { page: contactPage, limit: 25 }
+    );
+    setContacts(data.contacts);
+    setContactsTotal(data.total);
+  }, [contactPage]);
+
   const loadActivity = useCallback(async () => {
     const data = await callAdminApi<{ events: Record<string, unknown>[]; total: number }>(
       'list_activity',
@@ -174,6 +187,7 @@ export default function AdminDashboard() {
         if (tab === 'users') await loadUsers();
         if (tab === 'licenses') await loadLicenses();
         if (tab === 'feedback') await loadFeedback();
+        if (tab === 'contact') await loadContacts();
         if (tab === 'activity') await loadActivity();
         if (tab === 'audit') await loadAudit();
       } catch (err) {
@@ -281,6 +295,7 @@ export default function AdminDashboard() {
     { id: 'users', label: 'Users' },
     { id: 'licenses', label: 'Licenses' },
     { id: 'feedback', label: 'Feedback' },
+    { id: 'contact', label: 'Contact' },
     { id: 'activity', label: 'Activity' },
     { id: 'audit', label: 'Audit log' },
   ];
@@ -333,6 +348,7 @@ export default function AdminDashboard() {
               <div className={styles.card}><div className={styles.cardLabel}>Free</div><div className={styles.cardValue}>{stats.freeUsers}</div></div>
               <div className={styles.card}><div className={styles.cardLabel}>Active licenses</div><div className={styles.cardValue}>{stats.activeLicenses}</div></div>
               <div className={styles.card}><div className={styles.cardLabel}>Feedback</div><div className={styles.cardValue}>{stats.feedbackCount}</div></div>
+              <div className={styles.card}><div className={styles.cardLabel}>Contact</div><div className={styles.cardValue}>{stats.contactCount}</div></div>
             </div>
             <AdminCharts signupsByDay={stats.signupsByDay} activityByDay={stats.activityByDay} />
             <div className={styles.panel}>
@@ -503,6 +519,35 @@ export default function AdminDashboard() {
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        )}
+
+        {tab === 'contact' && (
+          <div className={styles.panel}>
+            <div className={styles.tableWrap}>
+              <table className={styles.table}>
+                <thead><tr><th>Date</th><th>Name</th><th>Email</th><th>Phone</th><th>Message</th></tr></thead>
+                <tbody>
+                  {contacts.map((c) => (
+                    <tr key={String(c.id)}>
+                      <td>{new Date(String(c.created_at)).toLocaleString()}</td>
+                      <td>{String(c.name)}</td>
+                      <td>{String(c.email)}</td>
+                      <td>{String(c.phone ?? '—')}</td>
+                      <td className={styles.messagePreview}>{String(c.message)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className={styles.pagination}>
+              <span>{contactsTotal} messages</span>
+              <div className={styles.actions}>
+                <button className={styles.btnSmall} type="button" disabled={contactPage <= 1} onClick={() => setContactPage((p) => p - 1)}>Prev</button>
+                <span>Page {contactPage}</span>
+                <button className={styles.btnSmall} type="button" disabled={contactPage * 25 >= contactsTotal} onClick={() => setContactPage((p) => p + 1)}>Next</button>
+              </div>
             </div>
           </div>
         )}
