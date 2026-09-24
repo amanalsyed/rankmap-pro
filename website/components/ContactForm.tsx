@@ -21,6 +21,19 @@ const EMPTY_FORM: FormFields = {
   message: '',
 };
 
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+function validateFields(fields: FormFields): string | null {
+  const name = fields.name.trim();
+  const email = fields.email.trim();
+  const message = fields.message.trim();
+
+  if (!name) return 'Please enter your name.';
+  if (!email || !EMAIL_PATTERN.test(email)) return 'Please enter a valid email address.';
+  if (!message) return 'Please enter a message.';
+  return null;
+}
+
 export default function ContactForm() {
   const [fields, setFields] = useState<FormFields>(EMPTY_FORM);
   const [status, setStatus] = useState<FormStatus>('idle');
@@ -36,6 +49,14 @@ export default function ContactForm() {
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    const validationError = validateFields(fields);
+    if (validationError) {
+      setStatus('error');
+      setErrorMessage(validationError);
+      return;
+    }
+
     setStatus('sending');
     setErrorMessage('');
 
