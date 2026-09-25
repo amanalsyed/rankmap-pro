@@ -1,7 +1,7 @@
 .section {
   position: relative;
   z-index: 1;
-  padding: 100px 0;
+  padding-block: var(--section-space-y);
 }
 
 .bgAccent {
@@ -38,13 +38,14 @@
 }
 
 .stepNum {
-  font-size: 3rem;
+  font-size: var(--text-display);
   font-weight: 800;
   background: linear-gradient(135deg, var(--brand), #667eea);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  line-height: 1;
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-tight);
   margin-bottom: 16px;
 }
 
@@ -57,15 +58,18 @@
 }
 
 .step h3 {
-  font-size: 1.15rem;
+  font-size: var(--text-xl);
   font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
   margin-bottom: 10px;
 }
 
 .step p {
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--text-muted);
-  line-height: 1.65;
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
 }
 
 @media (max-width: 768px) {

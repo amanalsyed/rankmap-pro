@@ -1,7 +1,7 @@
 .section {
   position: relative;
   z-index: 1;
-  padding: 100px 0;
+  padding-block: var(--section-space-y);
 }
 
 .groups {
@@ -43,21 +43,24 @@
   background: var(--brand-soft);
   display: grid;
   place-items: center;
-  font-size: 24px;
+  font-size: var(--text-2xl);
   flex-shrink: 0;
 }
 
 .groupHead h3 {
-  font-size: 1.35rem;
+  font-size: var(--text-2xl);
   font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
   margin-bottom: 8px;
   color: var(--accent, var(--brand));
 }
 
 .summary {
-  font-size: 15px;
+  font-size: var(--text-base);
   color: var(--text-muted);
-  line-height: 1.65;
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
   max-width: 720px;
 }
 
@@ -72,9 +75,10 @@
   display: flex;
   align-items: flex-start;
   gap: 10px;
-  font-size: 14px;
+  font-size: var(--text-sm);
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
 }
 
 .itemList svg {
@@ -106,17 +110,14 @@
   .itemList {
     grid-template-columns: 1fr;
   }
+
   .group {
     padding: 24px 20px;
   }
+
   .groupHead {
     flex-direction: column;
     gap: 12px;
   }
 }
 
-@media (max-width: 600px) {
-  .section {
-    padding: 72px 0;
-  }
-}

@@ -27,9 +27,6 @@ export default function DemoVideo() {
                 loading="lazy"
               />
             </div>
-            <p className={styles.caption}>
-              Full demo on YouTube — install free from the Chrome Web Store to try it yourself.
-            </p>
           </div>
         </Reveal>
       </div>

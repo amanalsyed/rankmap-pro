@@ -1,7 +1,7 @@
 .section {
   position: relative;
   z-index: 1;
-  padding: 100px 0;
+  padding-block: var(--section-space-y);
 }
 
 .card {
@@ -33,15 +33,17 @@
 }
 
 .field span {
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   color: var(--text);
 }
 
 .field input,
 .field textarea {
   font-family: var(--font);
-  font-size: 15px;
+  font-size: var(--text-base);
   padding: 12px 14px;
   border: 1px solid var(--line-strong);
   border-radius: var(--radius-sm);
@@ -78,16 +80,18 @@
 
 .successBanner strong {
   display: block;
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
   color: var(--success);
   margin-bottom: 10px;
 }
 
 .successBanner p {
-  font-size: 15px;
+  font-size: var(--text-base);
   color: var(--text-muted);
-  line-height: 1.6;
+  line-height: var(--leading-relaxed);
   margin-bottom: 24px;
 }
 
@@ -97,8 +101,9 @@
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #dc2626;
-  font-size: 14px;
-  line-height: 1.5;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
 }
 
 @media (max-width: 600px) {

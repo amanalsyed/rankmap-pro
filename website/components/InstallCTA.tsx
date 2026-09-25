@@ -42,11 +42,6 @@ export default function InstallCTA() {
                 Get Lifetime — {LIFETIME_PRICING.priceLabel}
               </TrackedOutboundLink>
             </div>
-            <ol className={styles.steps}>
-              <li>Install the extension from the Chrome Web Store (free tier included)</li>
-              <li>Open Google Maps and use lead scan, audits, rank check, and Local Scan</li>
-              <li>Optional: purchase Lifetime and activate your license key in Settings → Account</li>
-            </ol>
           </div>
         </div>
       </Reveal>

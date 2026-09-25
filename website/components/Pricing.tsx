@@ -227,7 +227,6 @@ export default function Pricing() {
 
 
         <Reveal delay={200}>
-          <p className={styles.guarantee}>{SITE.moneyBackGuarantee}</p>
           <p className={styles.note}>
             Install free from the Chrome Web Store, or purchase Lifetime for{' '}
             {LIFETIME_PRICING.priceLabel} ({LIFETIME_PRICING.discountLabel} the regular{' '}

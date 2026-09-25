@@ -2,6 +2,8 @@
   min-height: 100vh;
   background: var(--bg);
   padding: 32px 0 64px;
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
 }
 
 .header {
@@ -14,13 +16,17 @@
 }
 
 .title {
-  font-size: 28px;
+  font-size: var(--text-3xl);
   font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
 }
 
 .subtitle {
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-top: 4px;
 }
 
@@ -37,8 +43,10 @@
   border-radius: var(--radius-sm);
   border: 1px solid var(--line);
   background: var(--bg-elevated);
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   cursor: pointer;
 }
 
@@ -64,14 +72,18 @@
 }
 
 .cardLabel {
-  font-size: 13px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   color: var(--text-muted);
   margin-bottom: 8px;
 }
 
 .cardValue {
-  font-size: 28px;
+  font-size: var(--text-3xl);
   font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
 }
 
 .panel {
@@ -96,7 +108,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   font-family: var(--font);
-  font-size: 14px;
+  font-size: var(--text-sm);
 }
 
 .tableWrap {
@@ -106,7 +118,9 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 13px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
 }
 
 .table th,
@@ -120,14 +134,17 @@
 .table th {
   color: var(--text-muted);
   font-weight: 600;
+  letter-spacing: var(--tracking-normal);
 }
 
 .badge {
   display: inline-flex;
   padding: 4px 8px;
   border-radius: 999px;
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-wide);
 }
 
 .badgeActive {
@@ -161,8 +178,10 @@
   border-radius: 8px;
   border: 1px solid var(--line);
   background: #fff;
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   cursor: pointer;
 }
 
@@ -171,8 +190,10 @@
   border-radius: 8px;
   border: 1px solid #fecaca;
   background: #fff;
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   cursor: pointer;
   color: #b91c1c;
 }
@@ -182,8 +203,10 @@
   border-radius: 8px;
   border: 1px solid var(--brand);
   background: #fff;
-  font-size: 12px;
+  font-size: var(--text-xs);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   cursor: pointer;
   color: var(--brand);
 }
@@ -199,14 +222,18 @@
 }
 
 .loginTitle {
-  font-size: 24px;
+  font-size: var(--text-2xl);
   font-weight: 700;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
   margin-bottom: 8px;
 }
 
 .loginHint {
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
   margin-bottom: 20px;
 }
 
@@ -216,19 +243,25 @@
 
 .formGroup label {
   display: block;
-  font-size: 13px;
+  font-size: var(--text-sm);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-bottom: 6px;
 }
 
 .error {
   color: #b91c1c;
-  font-size: 13px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-top: 10px;
 }
 
 .empty {
   color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
   padding: 24px 0;
   text-align: center;
 }
@@ -250,13 +283,17 @@
 }
 
 .detailItem {
-  font-size: 13px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
 }
 
 .detailItem strong {
   display: block;
   color: var(--text-muted);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-bottom: 4px;
 }
 
@@ -264,17 +301,23 @@
   max-width: 360px;
   white-space: pre-wrap;
   word-break: break-word;
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
 }
 
 .notice {
   color: var(--success);
-  font-size: 13px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-top: 10px;
 }
 
 .mono {
   font-family: ui-monospace, monospace;
-  font-size: 12px;
+  font-size: var(--text-xs);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
 }
 
 .select {
@@ -282,7 +325,7 @@
   border: 1px solid var(--line);
   border-radius: var(--radius-sm);
   font-family: var(--font);
-  font-size: 14px;
+  font-size: var(--text-sm);
   background: #fff;
 }
 
@@ -295,19 +338,25 @@
 }
 
 .alertsPanel h3 {
-  font-size: 15px;
+  font-size: var(--text-base);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-bottom: 10px;
 }
 
 .alertWarning {
   color: #b45309;
-  font-size: 13px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-bottom: 6px;
 }
 
 .alertInfo {
   color: #1d4ed8;
-  font-size: 13px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-bottom: 6px;
 }
 
@@ -327,8 +376,10 @@
 }
 
 .chartTitle {
-  font-size: 14px;
+  font-size: var(--text-sm);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-bottom: 12px;
 }
 
@@ -356,7 +407,9 @@
 }
 
 .chartBarLabel {
-  font-size: 9px;
+  font-size: var(--text-xs);
+  line-height: var(--leading-none);
+  letter-spacing: var(--tracking-normal);
   color: var(--text-muted);
   margin-top: 4px;
 }
@@ -367,7 +420,9 @@
   border-radius: var(--radius-sm);
   padding: 12px;
   margin-bottom: 12px;
-  font-size: 13px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
   word-break: break-all;
 }
 

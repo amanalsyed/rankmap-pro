@@ -21,6 +21,35 @@
   --shadow: 0 10px 30px rgba(17, 24, 39, 0.06);
   --shadow-lg: 0 24px 60px rgba(79, 70, 229, 0.12);
   --container: 1120px;
+  --site-header-height: 4.5rem; /* fixed navbar — used for hero vertical balance */
+  --section-space-y: clamp(5rem, 10vw, 6.25rem); /* 80–100px — consistent section rhythm */
+
+  /* Typography scale — rem-based, responsive where noted */
+  --text-xs: 0.75rem; /* 12px — badges, captions, fine print */
+  --text-sm: 0.875rem; /* 14px — nav, labels, secondary */
+  --text-base: 1rem; /* 16px — body, buttons, inputs */
+  --text-lg: 1.125rem; /* 18px — emphasis, footer headings */
+  --text-xl: 1.25rem; /* 20px — h4, card titles */
+  --text-2xl: clamp(1.25rem, 2vw, 1.5rem); /* h3 ~20–24px */
+  --text-3xl: clamp(1.75rem, 3vw, 2.25rem); /* h2 sections ~28–36px */
+  --text-4xl: clamp(2rem, 4vw, 2.75rem); /* page h1 ~32–44px */
+  --text-hero: clamp(2.25rem, 4.5vw, 3.25rem); /* hero h1 ~36–52px */
+  --text-lead: clamp(1.0625rem, 2vw, 1.25rem); /* intro / subtitle ~17–20px */
+  --text-display: clamp(2rem, 5vw, 3rem); /* decorative step numbers */
+  --text-price: clamp(2rem, 4vw, 2.5rem); /* pricing amounts */
+
+  --leading-none: 1;
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.6;
+  --leading-relaxed: 1.75;
+
+  --tracking-tighter: -0.04em; /* hero display headings */
+  --tracking-tight: -0.03em; /* h1–h4, price amounts */
+  --tracking-normal: 0; /* body, nav, buttons, inputs */
+  --tracking-wide: 0.04em; /* compact uppercase badges */
+  --tracking-wider: 0.06em; /* footer group labels, pricing badges */
+  --tracking-widest: 0.08em; /* section eyebrow labels */
 }
 
 *,
@@ -32,20 +61,43 @@
 }
 
 html {
+  font-size: 100%;
   scroll-behavior: smooth;
 }
 
 body {
   font-family: var(--font);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  letter-spacing: var(--tracking-normal);
   color: var(--text);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
 
+p {
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
+}
+
 a {
   color: inherit;
   text-decoration: none;
+  letter-spacing: inherit;
+}
+
+input,
+textarea,
+select,
+button {
+  letter-spacing: var(--tracking-normal);
+}
+
+input,
+textarea,
+select {
+  line-height: var(--leading-snug);
 }
 
 img {
@@ -57,8 +109,8 @@ h1,
 h2,
 h3,
 h4 {
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--leading-tight);
 }
 
 .container {
@@ -75,8 +127,10 @@ h4 {
   padding: 14px 24px;
   border-radius: var(--radius-sm);
   font-family: var(--font);
-  font-size: 15px;
+  font-size: var(--text-base);
   font-weight: 600;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   border: none;
   cursor: pointer;
   transition:
@@ -134,9 +188,14 @@ h4 {
 }
 
 /* Section typography — consistent centered headers sitewide */
+/* Shared vertical rhythm for homepage sections */
+.site-section {
+  padding-block: var(--section-space-y);
+}
+
 .section-header {
   text-align: center;
-  margin-bottom: 56px;
+  margin-bottom: clamp(2.5rem, 5vw, 3.5rem);
 }
 
 .section-header .section-label {
@@ -164,10 +223,11 @@ h4 {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+  font-size: var(--text-sm);
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-widest);
   color: var(--brand);
   margin-bottom: 16px;
 }
@@ -181,16 +241,19 @@ h4 {
 }
 
 .section-title {
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: var(--text-3xl);
   font-weight: 800;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
   margin-bottom: 16px;
 }
 
 .section-subtitle {
-  font-size: clamp(1rem, 2vw, 1.15rem);
+  font-size: var(--text-lead);
   color: var(--text-muted);
   max-width: 560px;
-  line-height: 1.65;
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
 }
 
 /* Animations */
@@ -312,28 +375,35 @@ h4 {
 }
 
 .legal-content h1 {
-  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-size: var(--text-4xl);
   font-weight: 800;
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
   margin-bottom: 12px;
 }
 
 .legal-content .legal-meta {
   color: var(--text-muted);
-  font-size: 14px;
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-normal);
   margin-bottom: 40px;
 }
 
 .legal-content h2 {
-  font-size: 1.25rem;
+  font-size: var(--text-xl);
   font-weight: 700;
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-tight);
   margin: 36px 0 12px;
 }
 
 .legal-content p,
 .legal-content li {
   color: var(--text-muted);
-  line-height: 1.75;
-  font-size: 15px;
+  line-height: var(--leading-relaxed);
+  letter-spacing: var(--tracking-normal);
+  font-size: var(--text-base);
 }
 
 .legal-content ul {
